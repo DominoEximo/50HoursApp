@@ -9,6 +9,7 @@ import org.springframework.web.context.annotation.RequestScope;
 import java.util.List;
 
 @RestController("/user")
+@CrossOrigin
 @RequestScope
 public class UserController {
 
