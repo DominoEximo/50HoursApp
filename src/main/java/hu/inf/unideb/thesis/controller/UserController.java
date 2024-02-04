@@ -22,7 +22,7 @@ public class UserController {
     @Autowired
     RoleService roleService;
 
-    @PostMapping(value = "/signup")
+    @PostMapping(value = "/signup",produces = "application/json")
     public ResponseEntity<String> registerUser(@RequestBody User user){
 
         if(userService.findByName(user.getName()) != null){
@@ -31,7 +31,7 @@ public class UserController {
         else {
             user.setRoles(List.of(roleService.findByName("USER")));
             userService.save(user);
-            return new ResponseEntity<>(user.getName() +" " + "registered!", HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
     }
 
