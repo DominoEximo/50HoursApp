@@ -22,6 +22,11 @@ public class UserController {
     @Autowired
     RoleService roleService;
 
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
     @PostMapping(value = "/signup",produces = "application/json")
     public ResponseEntity<String> registerUser(@RequestBody User user){
 

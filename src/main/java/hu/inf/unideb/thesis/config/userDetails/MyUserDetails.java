@@ -1,4 +1,4 @@
-package hu.inf.unideb.thesis.config.security;
+package hu.inf.unideb.thesis.config.userDetails;
 
 
 import hu.inf.unideb.thesis.entity.Role;

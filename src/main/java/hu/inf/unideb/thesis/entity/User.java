@@ -25,6 +25,14 @@ public class User {
 
     private String password;
 
+    private String OMID;
+
+    private String IKSZCoordinator;
+
+    private String coordinatorEmail;
+
+    private String coordinatorPhone;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
@@ -38,13 +46,17 @@ public class User {
     public User() {
     }
 
-    public User(String name, String email, String phoneNumber, Date birthDate, Character gender, String password, List<Role> roles) {
+    public User( String name, String email, String phoneNumber, Date birthDate, Character gender, String password, String OMID, String IKSZCoordinator, String coordinatorEmail, String coordinatorPhone, List<Role> roles) {
         this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.birthDate = birthDate;
         this.gender = gender;
         this.password = password;
+        this.OMID = OMID;
+        this.IKSZCoordinator = IKSZCoordinator;
+        this.coordinatorEmail = coordinatorEmail;
+        this.coordinatorPhone = coordinatorPhone;
         this.roles = roles;
     }
 
@@ -110,5 +122,37 @@ public class User {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public String getOMID() {
+        return OMID;
+    }
+
+    public void setOMID(String OMID) {
+        this.OMID = OMID;
+    }
+
+    public String getIKSZCoordinator() {
+        return IKSZCoordinator;
+    }
+
+    public void setIKSZCoordinator(String IKSZCoordinator) {
+        this.IKSZCoordinator = IKSZCoordinator;
+    }
+
+    public String getCoordinatorEmail() {
+        return coordinatorEmail;
+    }
+
+    public void setCoordinatorEmail(String coordinatorEmail) {
+        this.coordinatorEmail = coordinatorEmail;
+    }
+
+    public String getCoordinatorPhone() {
+        return coordinatorPhone;
+    }
+
+    public void setCoordinatorPhone(String coordinatorPhone) {
+        this.coordinatorPhone = coordinatorPhone;
     }
 }
