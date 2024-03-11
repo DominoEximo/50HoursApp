@@ -16,7 +16,12 @@ public class InstitutionDAO implements DAO<Institution>{
 
     @Override
     public Institution findById(long id) {
-        return institutionRepository.findById(id).get();
+
+        if (institutionRepository.findById(id).isPresent()){
+            return institutionRepository.findById(id).get();
+        }else {
+            return  null;
+        }
     }
 
     @Override

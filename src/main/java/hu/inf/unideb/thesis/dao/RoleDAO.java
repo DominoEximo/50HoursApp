@@ -19,7 +19,12 @@ public class RoleDAO implements DAO<Role>{
 
     @Override
     public Role findById(long id) {
-        return roleRepository.findById(id).get();
+
+        if (roleRepository.findById(id).isPresent()){
+            return roleRepository.findById(id).get();
+        }else {
+            return  null;
+        }
     }
 
     @Override

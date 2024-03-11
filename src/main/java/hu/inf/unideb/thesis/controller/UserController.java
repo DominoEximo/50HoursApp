@@ -16,6 +16,10 @@ import java.util.List;
 @RequestScope
 public class UserController {
 
+    private final String USERNOTFOUNDMESSAGE = "Could not find user with given ID";
+
+    private final String USERALREADYEXISTMESSAGE = "User already exists";
+
     @Autowired
     UserService userService;
 
@@ -23,11 +27,11 @@ public class UserController {
     RoleService roleService;
 
 
-    @PostMapping(value = "/signup",produces = "application/json")
+    @PostMapping(value = "/users/signup",produces = "application/json")
     public ResponseEntity<String> registerUser(@RequestBody User user){
 
         if(userService.findByName(user.getName()) != null){
-            throw new RuntimeException("User already exists");
+            throw new RuntimeException(USERALREADYEXISTMESSAGE);
         }
         else {
             user.setRoles(List.of(roleService.findByName("USER")));
@@ -36,9 +40,45 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/getUsers",produces = "application/json")
+    @RequestMapping(value = "/users/getUsers",produces = "application/json")
     public List<User> getUsers(){
 
         return userService.findAll();
+    }
+
+    @GetMapping(value = "/users/findUserById/{id}", produces = "application/json")
+    public User getUserById(@PathVariable Long id){
+
+        if (userService.findById(id) != null){
+            return userService.findById(id);
+        }
+        else {
+            throw new RuntimeException(USERNOTFOUNDMESSAGE);
+        }
+
+    }
+
+    @RequestMapping(value = "/users/deleteUserById/{id}")
+    public void deleteUserById(@PathVariable Long id){
+
+        if(userService.findById(id) != null){
+            userService.delete(userService.findById(id));
+        }
+        else {
+            throw new RuntimeException(USERNOTFOUNDMESSAGE);
+        }
+
+    }
+
+    @PostMapping(value = "/users/saveUser", consumes = "application/json")
+    public void saveUser(@RequestBody User user){
+
+        if (userService.findByName(user.getName()) == null && userService.findById(user.getId()) == null){
+            userService.save(user);
+        }
+        else {
+            throw new RuntimeException(USERALREADYEXISTMESSAGE);
+        }
+
     }
 }

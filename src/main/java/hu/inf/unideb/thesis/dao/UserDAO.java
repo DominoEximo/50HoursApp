@@ -29,7 +29,11 @@ public class UserDAO implements DAO<User>{
 
     @Override
     public User findById(long id) {
-        return userRepository.findById(id).get();
+        if (userRepository.findById(id).isPresent()){
+            return userRepository.findById(id).get();
+        }else {
+            return  null;
+        }
     }
 
     @Override

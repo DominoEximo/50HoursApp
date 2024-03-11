@@ -39,7 +39,7 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public void delete(Contract contract) {
-        contractDAO.update(contract);
+        contractDAO.delete(contract.getId());
     }
 
     @Override
