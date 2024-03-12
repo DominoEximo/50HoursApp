@@ -1,5 +1,6 @@
 package hu.inf.unideb.thesis.controller;
 
+import hu.inf.unideb.thesis.entity.Institution;
 import hu.inf.unideb.thesis.entity.User;
 import hu.inf.unideb.thesis.service.RoleService;
 import hu.inf.unideb.thesis.service.UserService;
@@ -40,13 +41,13 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/users/getUsers",produces = "application/json")
+    @GetMapping(value = "/users",produces = "application/json")
     public List<User> getUsers(){
 
         return userService.findAll();
     }
 
-    @GetMapping(value = "/users/findUserById/{id}", produces = "application/json")
+    @GetMapping(value = "/users/{id}", produces = "application/json")
     public User getUserById(@PathVariable Long id){
 
         if (userService.findById(id) != null){
@@ -58,7 +59,7 @@ public class UserController {
 
     }
 
-    @RequestMapping(value = "/users/deleteUserById/{id}")
+    @DeleteMapping(value = "/users/{id}")
     public void deleteUserById(@PathVariable Long id){
 
         if(userService.findById(id) != null){
@@ -70,7 +71,7 @@ public class UserController {
 
     }
 
-    @PostMapping(value = "/users/saveUser", consumes = "application/json")
+    @PostMapping(value = "/users", consumes = "application/json")
     public void saveUser(@RequestBody User user){
 
         if (userService.findByName(user.getName()) == null && userService.findById(user.getId()) == null){
@@ -79,6 +80,13 @@ public class UserController {
         else {
             throw new RuntimeException(USERALREADYEXISTMESSAGE);
         }
+
+    }
+
+    @PutMapping(value = "/users/{id}", consumes = "application/json")
+    public void updateUser(@PathVariable Long id, @RequestBody User user){
+
+        userService.update(id,user);
 
     }
 }

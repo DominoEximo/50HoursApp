@@ -22,13 +22,13 @@ public class ContractController {
         contractService.setUpMockedData();
     }
 
-    @RequestMapping(value = "/contracts/getContracts",produces = "application/json")
+    @GetMapping(value = "/contracts",produces = "application/json")
     public List<Contract> getContracts(){
 
         return contractService.findAll();
     }
 
-    @RequestMapping(value = "/contracts/getContractById/{id}",produces = "application/json")
+    @GetMapping(value = "/contracts/{id}",produces = "application/json")
     public Contract getContractById(@PathVariable Long id){
 
         return contractService.findById(id);
@@ -36,7 +36,7 @@ public class ContractController {
     }
 
 
-    @PostMapping(value = "/contracts/saveContract",consumes = "application/json")
+    @PostMapping(value = "/contracts",consumes = "application/json")
     public void saveContract(@RequestBody Contract contract){
 
         if (contractService.findById(contract.getId()) == null){
@@ -48,7 +48,7 @@ public class ContractController {
 
     }
 
-    @RequestMapping(value = "/contracts/deleteContractById/{id}")
+    @DeleteMapping(value = "/contracts/{id}")
     public void deleteContract(@PathVariable Long id){
 
         if (contractService.findById(id) != null){
@@ -57,6 +57,13 @@ public class ContractController {
         else {
             throw new RuntimeException("Contract not found");
         }
+
+    }
+
+    @PutMapping(value = "/contracts/{id}", consumes = "application/json")
+    public void updateContract(@PathVariable Long id, @RequestBody Contract contract){
+
+        contractService.update(id,contract);
 
     }
 }

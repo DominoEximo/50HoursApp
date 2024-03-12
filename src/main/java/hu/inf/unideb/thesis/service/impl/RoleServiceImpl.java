@@ -1,6 +1,7 @@
 package hu.inf.unideb.thesis.service.impl;
 
 import hu.inf.unideb.thesis.dao.RoleDAO;
+import hu.inf.unideb.thesis.entity.Contract;
 import hu.inf.unideb.thesis.entity.Role;
 import hu.inf.unideb.thesis.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,18 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public void save(Role role) {
         roleDAO.save(role);
+    }
+
+    @Override
+    public void update(Long id, Role role) {
+
+        if (roleDAO.findById(id) != null){
+            roleDAO.update(role);
+        }
+        else {
+            throw new RuntimeException("Could not find role");
+        }
+
     }
 
     @Override

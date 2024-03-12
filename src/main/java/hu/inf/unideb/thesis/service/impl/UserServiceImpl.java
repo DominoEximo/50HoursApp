@@ -1,6 +1,7 @@
 package hu.inf.unideb.thesis.service.impl;
 
 import hu.inf.unideb.thesis.dao.UserDAO;
+import hu.inf.unideb.thesis.entity.Institution;
 import hu.inf.unideb.thesis.entity.User;
 import hu.inf.unideb.thesis.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public void save(User user) {
         userDAO.save(user);
+    }
+
+    @Override
+    public void update(Long id, User user) {
+
+        if (userDAO.findById(id) != null){
+            userDAO.update(user);
+        }
+        else {
+            throw new RuntimeException("Could not find user");
+        }
+
     }
 
     @Override

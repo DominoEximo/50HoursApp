@@ -27,13 +27,13 @@ public class InstitutionController {
         institutionService.setUpMockedData();
     }
 
-    @RequestMapping(value = "/institution/getInstitutions",produces = "application/json")
+    @GetMapping(value = "/institutions",produces = "application/json")
     public List<Institution> getInstitutions(){
 
         return institutionService.findAll();
     }
 
-    @GetMapping(value = "/institutions/getInstitutionById/{id}")
+    @GetMapping(value = "/institutions/{id}")
     public Institution getInstitutionById(@PathVariable Long id){
 
         if (institutionService.findById(id) != null){
@@ -47,7 +47,7 @@ public class InstitutionController {
 
     }
 
-    @RequestMapping(value = "/institutions/saveInstitution", consumes = "application/json")
+    @PostMapping(value = "/institutions", consumes = "application/json")
     public void saveInstitution(@RequestBody Institution institution){
 
         if (institutionService.findById(institution.getId()) == null){
@@ -63,7 +63,7 @@ public class InstitutionController {
 
     }
 
-    @RequestMapping("/institutions/deleteInstitutionById/{id}")
+    @DeleteMapping("/institutions/{id}")
     public void deleteInstitutionById(@PathVariable Long id){
 
         if (institutionService.findById(id) != null){
@@ -76,6 +76,13 @@ public class InstitutionController {
             throw new RuntimeException(INSTITUTIONNOTFOUNDMESSAGE);
 
         }
+    }
+
+    @PutMapping(value = "/institutions/{id}", consumes = "application/json")
+    public void updateInstitution(@PathVariable Long id, @RequestBody Institution institution){
+
+        institutionService.update(id,institution);
+
     }
 
 }

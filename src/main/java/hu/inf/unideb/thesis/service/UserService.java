@@ -14,6 +14,8 @@ public interface UserService {
     List<User> getAllPaginated(int pageNumber, int pageSize);
     void save(User user);
 
+    void update(Long id, User user);
+
     void delete(User user);
 
     /**

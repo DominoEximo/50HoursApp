@@ -38,6 +38,18 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
+    public void update(Long id,Contract contract) {
+
+        if (contractDAO.findById(id) != null){
+            contractDAO.update(contract);
+        }
+        else {
+            throw new RuntimeException("Could not find contract");
+        }
+
+    }
+
+    @Override
     public void delete(Contract contract) {
         contractDAO.delete(contract.getId());
     }

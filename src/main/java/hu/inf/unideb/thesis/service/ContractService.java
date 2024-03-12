@@ -13,6 +13,8 @@ public interface ContractService {
 
     void save(Contract contract);
 
+    void update(Long id, Contract contract);
+
     void delete(Contract contract);
 
     void setUpMockedData();

@@ -1,6 +1,7 @@
 package hu.inf.unideb.thesis.service.impl;
 
 import hu.inf.unideb.thesis.dao.InstitutionDAO;
+import hu.inf.unideb.thesis.entity.Contract;
 import hu.inf.unideb.thesis.entity.Institution;
 import hu.inf.unideb.thesis.service.InstitutionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,18 @@ public class InstitutionServiceImpl implements InstitutionService {
     @Override
     public void save(Institution institution) {
         institutionDAO.save(institution);
+    }
+
+    @Override
+    public void update(Long id, Institution institution) {
+
+        if (institutionDAO.findById(id) != null){
+            institutionDAO.update(institution);
+        }
+        else {
+            throw new RuntimeException("Could not find institution");
+        }
+
     }
 
     @Override

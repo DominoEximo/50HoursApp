@@ -14,6 +14,8 @@ public interface InstitutionService {
 
     void save(Institution institution);
 
+    void update(Long id, Institution institution);
+
     void delete(Institution institution);
 
     void setUpMockedData();
