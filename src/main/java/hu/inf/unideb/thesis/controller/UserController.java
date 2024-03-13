@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.RequestScope;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @RestController("/user")
 @CrossOrigin
@@ -29,64 +30,75 @@ public class UserController {
 
 
     @PostMapping(value = "/users/signup",produces = "application/json")
-    public ResponseEntity<String> registerUser(@RequestBody User user){
+    public CompletableFuture<ResponseEntity<String>> registerUser(@RequestBody User user){
+        return CompletableFuture.supplyAsync(() -> {
 
-        if(userService.findByName(user.getName()) != null){
-            throw new RuntimeException(USERALREADYEXISTMESSAGE);
-        }
-        else {
-            user.setRoles(List.of(roleService.findByName("USER")));
-            userService.save(user);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
+            if(userService.findByName(user.getName()) != null){
+                throw new RuntimeException(USERALREADYEXISTMESSAGE);
+            }
+            else {
+                user.setRoles(List.of(roleService.findByName("USER")));
+                userService.save(user);
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+        });
+
     }
 
     @GetMapping(value = "/users",produces = "application/json")
-    public List<User> getUsers(){
+    public CompletableFuture<List<User>> getUsers(){
 
-        return userService.findAll();
+        return CompletableFuture.supplyAsync(() -> userService.findAll());
     }
 
     @GetMapping(value = "/users/{id}", produces = "application/json")
-    public User getUserById(@PathVariable Long id){
-
-        if (userService.findById(id) != null){
-            return userService.findById(id);
-        }
-        else {
-            throw new RuntimeException(USERNOTFOUNDMESSAGE);
-        }
-
+    public CompletableFuture<User> getUserById(@PathVariable Long id) {
+        return CompletableFuture.supplyAsync(() -> {
+            User user = userService.findById(id);
+            if (user != null) {
+                return user;
+            } else {
+                throw new RuntimeException(USERNOTFOUNDMESSAGE);
+            }
+        });
     }
 
     @DeleteMapping(value = "/users/{id}")
-    public void deleteUserById(@PathVariable Long id){
-
-        if(userService.findById(id) != null){
-            userService.delete(userService.findById(id));
-        }
-        else {
-            throw new RuntimeException(USERNOTFOUNDMESSAGE);
-        }
-
+    public CompletableFuture<Void> deleteUserById(@PathVariable Long id) {
+        return CompletableFuture.supplyAsync(() -> {
+            User user = userService.findById(id);
+            if (user != null) {
+                userService.delete(user);
+                return null;
+            } else {
+                throw new RuntimeException(USERNOTFOUNDMESSAGE);
+            }
+        });
     }
 
     @PostMapping(value = "/users", consumes = "application/json")
-    public void saveUser(@RequestBody User user){
+    public CompletableFuture<Void> saveUser(@RequestBody User user){
 
-        if (userService.findByName(user.getName()) == null && userService.findById(user.getId()) == null){
-            userService.save(user);
-        }
-        else {
-            throw new RuntimeException(USERALREADYEXISTMESSAGE);
-        }
+        return CompletableFuture.supplyAsync(() -> {
+            if (userService.findByName(user.getName()) == null && userService.findById(user.getId()) == null){
+                userService.save(user);
+                return null;
+            }
+            else {
+                throw new RuntimeException(USERALREADYEXISTMESSAGE);
+            }
+        });
 
     }
 
     @PutMapping(value = "/users/{id}", consumes = "application/json")
-    public void updateUser(@PathVariable Long id, @RequestBody User user){
+    public CompletableFuture<Void> updateUser(@PathVariable Long id, @RequestBody User user){
 
-        userService.update(id,user);
+        return CompletableFuture.supplyAsync(() -> {
+                userService.update(id,user);
+                return null;
+        });
+
 
     }
 }
