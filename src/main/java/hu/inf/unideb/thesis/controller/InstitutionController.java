@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.RequestScope;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @RestController("/institution")
 @CrossOrigin
@@ -28,60 +29,74 @@ public class InstitutionController {
     }
 
     @GetMapping(value = "/institutions",produces = "application/json")
-    public List<Institution> getInstitutions(){
+    public CompletableFuture<List<Institution>> getInstitutions(){
+        return  CompletableFuture.supplyAsync(() -> institutionService.findAll());
 
-        return institutionService.findAll();
     }
 
     @GetMapping(value = "/institutions/{id}")
-    public Institution getInstitutionById(@PathVariable Long id){
+    public CompletableFuture<Institution> getInstitutionById(@PathVariable Long id){
 
-        if (institutionService.findById(id) != null){
+        return  CompletableFuture.supplyAsync(() -> {
+            if (institutionService.findById(id) != null){
 
-            return institutionService.findById(id);
+                return institutionService.findById(id);
 
-        }
-        else {
-            throw new RuntimeException(INSTITUTIONNOTFOUNDMESSAGE);
-        }
-
+            }
+            else {
+                throw new RuntimeException(INSTITUTIONNOTFOUNDMESSAGE);
+            }
+        });
     }
 
     @PostMapping(value = "/institutions", consumes = "application/json")
-    public void saveInstitution(@RequestBody Institution institution){
+    public CompletableFuture<Void> saveInstitution(@RequestBody Institution institution){
 
-        if (institutionService.findById(institution.getId()) == null){
+        return  CompletableFuture.supplyAsync(() -> {
+            if (institutionService.findById(institution.getId()) == null){
 
-            institutionService.save(institution);
+                institutionService.save(institution);
+                return null;
+            }
+            else {
 
-        }
-        else {
+                throw new RuntimeException(INSTITUTIONALREADYEXISTMESSAGE);
 
-            throw new RuntimeException(INSTITUTIONALREADYEXISTMESSAGE);
+            }
+        });
 
-        }
+
 
     }
 
     @DeleteMapping("/institutions/{id}")
-    public void deleteInstitutionById(@PathVariable Long id){
+    public CompletableFuture<Void> deleteInstitutionById(@PathVariable Long id){
 
-        if (institutionService.findById(id) != null){
+        return  CompletableFuture.supplyAsync(() -> {
 
-            institutionService.delete(institutionService.findById(id));
+            if (institutionService.findById(id) != null){
 
-        }
-        else {
+                institutionService.delete(institutionService.findById(id));
+                return  null;
+            }
+            else {
 
-            throw new RuntimeException(INSTITUTIONNOTFOUNDMESSAGE);
+                throw new RuntimeException(INSTITUTIONNOTFOUNDMESSAGE);
 
-        }
+            }
+        });
+
     }
 
     @PutMapping(value = "/institutions/{id}", consumes = "application/json")
-    public void updateInstitution(@PathVariable Long id, @RequestBody Institution institution){
+    public CompletableFuture<Void> updateInstitution(@PathVariable Long id, @RequestBody Institution institution){
 
-        institutionService.update(id,institution);
+        return  CompletableFuture.supplyAsync(() -> {
+
+            institutionService.update(id,institution);
+            return null;
+
+        });
 
     }
 

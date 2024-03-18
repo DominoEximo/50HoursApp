@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.RequestScope;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @RestController("/role")
 @CrossOrigin
@@ -22,52 +23,60 @@ public class RoleController {
     RoleService roleService;
 
     @GetMapping(value = "/roles",produces = "application/json")
-    public List<Role> getRoles(){
-
-        return roleService.findAll();
+    public CompletableFuture<List<Role>> getRoles(){
+        return  CompletableFuture.supplyAsync(() -> roleService.findAll());
     }
 
     @GetMapping(value = "/roles/{id}", produces = "application/json")
-    public Role getRoleById(@PathVariable Long id){
+    public CompletableFuture<Role> getRoleById(@PathVariable Long id){
 
-        if (roleService.findById(id) != null){
-            return roleService.findById(id);
-        }
-        else {
-            throw new RuntimeException(ROLENOTFOUNDMESSAGE);
-        }
+        return  CompletableFuture.supplyAsync(() -> {
+            if (roleService.findById(id) != null){
+                return roleService.findById(id);
+            }
+            else {
+                throw new RuntimeException(ROLENOTFOUNDMESSAGE);
+            }
+        });
+
 
     }
 
     @DeleteMapping(value = "/roles/{id}")
-    public void deleteRoleById(@PathVariable Long id){
+    public CompletableFuture<Void> deleteRoleById(@PathVariable Long id){
+        return  CompletableFuture.supplyAsync(() -> {
+            if(roleService.findById(id) != null){
+                roleService.delete(roleService.findById(id));
+                return null;
+            }
+            else {
+                throw new RuntimeException(ROLENOTFOUNDMESSAGE);
+            }
+        });
 
-        if(roleService.findById(id) != null){
-            roleService.delete(roleService.findById(id));
-        }
-        else {
-            throw new RuntimeException(ROLENOTFOUNDMESSAGE);
-        }
 
     }
 
     @PostMapping(value = "/roles", consumes = "application/json")
-    public void saveRole(@RequestBody Role role){
+    public CompletableFuture<Void> saveRole(@RequestBody Role role){
 
-        if (roleService.findByName(role.getName()) == null && roleService.findById(role.getId()) == null){
-            roleService.save(role);
-        }
-        else {
-            throw new RuntimeException(ROLEALREADYEXISTMESSAGE);
-        }
-
+        return  CompletableFuture.supplyAsync(() -> {
+            if (roleService.findByName(role.getName()) == null && roleService.findById(role.getId()) == null){
+                roleService.save(role);
+                return  null;
+            }
+            else {
+                throw new RuntimeException(ROLEALREADYEXISTMESSAGE);
+            }
+        });
     }
 
     @PutMapping(value = "/roles/{id}", consumes = "application/json")
-    public void updateRole(@PathVariable Long id, @RequestBody Role role){
-
-        roleService.update(id,role);
-
+    public CompletableFuture<Void> updateRole(@PathVariable Long id, @RequestBody Role role){
+        return  CompletableFuture.supplyAsync(() -> {
+            roleService.update(id,role);
+            return null;
+        });
     }
 
 }

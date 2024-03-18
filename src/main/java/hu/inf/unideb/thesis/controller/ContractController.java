@@ -7,11 +7,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.RequestScope;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @RestController("/contract")
 @CrossOrigin
 @RequestScope
 public class ContractController {
+
+    private static final String CONTRACTNOTFOUNDMESSAGE = "Contract not found";
 
     @Autowired
     ContractService contractService;
@@ -23,47 +26,67 @@ public class ContractController {
     }
 
     @GetMapping(value = "/contracts",produces = "application/json")
-    public List<Contract> getContracts(){
+    public CompletableFuture<List<Contract>> getContracts(){
 
-        return contractService.findAll();
+        return  CompletableFuture.supplyAsync(() -> contractService.findAll());
+
     }
 
     @GetMapping(value = "/contracts/{id}",produces = "application/json")
-    public Contract getContractById(@PathVariable Long id){
+    public CompletableFuture<Contract> getContractById(@PathVariable Long id){
+        return  CompletableFuture.supplyAsync(() -> contractService.findById(id));
 
-        return contractService.findById(id);
 
     }
 
 
     @PostMapping(value = "/contracts",consumes = "application/json")
-    public void saveContract(@RequestBody Contract contract){
+    public CompletableFuture<Void> saveContract(@RequestBody Contract contract){
 
-        if (contractService.findById(contract.getId()) == null){
-            contractService.save(contract);
-        }
-        else {
-            throw new RuntimeException("Duplicate contract exception");
-        }
+        return  CompletableFuture.supplyAsync(() -> {
+            if (contractService.findById(contract.getId()) == null){
+
+                contractService.save(contract);
+                return null;
+
+            }
+            else {
+                throw new RuntimeException("Duplicate contract exception");
+            }
+        });
+
 
     }
 
     @DeleteMapping(value = "/contracts/{id}")
-    public void deleteContract(@PathVariable Long id){
+    public CompletableFuture<Void> deleteContract(@PathVariable Long id){
+        return  CompletableFuture.supplyAsync(() -> {
+            if (contractService.findById(id) != null){
 
-        if (contractService.findById(id) != null){
-            contractService.delete(contractService.findById(id));
-        }
-        else {
-            throw new RuntimeException("Contract not found");
-        }
+                contractService.delete(contractService.findById(id));
+                return null;
+
+            }
+            else {
+
+                throw new RuntimeException("Contract not found");
+
+            }
+        });
+
 
     }
 
     @PutMapping(value = "/contracts/{id}", consumes = "application/json")
-    public void updateContract(@PathVariable Long id, @RequestBody Contract contract){
-
-        contractService.update(id,contract);
-
+    public CompletableFuture<Void> updateContract(@PathVariable Long id, @RequestBody Contract contract){
+        return  CompletableFuture.supplyAsync(() -> {
+            if (contractService.findById(id) != null) {
+                contractService.update(id, contract);
+                return null;
+            }
+            else {
+                throw new RuntimeException(CONTRACTNOTFOUNDMESSAGE);
+            }
+        });
     }
 }
