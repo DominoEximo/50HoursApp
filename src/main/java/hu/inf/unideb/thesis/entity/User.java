@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -37,6 +38,9 @@ public class User {
 
     private String coordinatorPhone;
 
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<JobType> preferedJobs;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
@@ -48,6 +52,7 @@ public class User {
 
 
     public User() {
+        this.preferedJobs = new ArrayList<>();
     }
 
     public User( String username,String firstName,String lastName, String email, String phoneNumber, Date birthDate, Character gender, String password, String OMID, String IKSZCoordinator, String coordinatorEmail, String coordinatorPhone, List<Role> roles) {
@@ -64,6 +69,7 @@ public class User {
         this.coordinatorEmail = coordinatorEmail;
         this.coordinatorPhone = coordinatorPhone;
         this.roles = roles;
+        this.preferedJobs = new ArrayList<>();
     }
 
     public String getUsername() {
@@ -176,5 +182,13 @@ public class User {
 
     public void setCoordinatorPhone(String coordinatorPhone) {
         this.coordinatorPhone = coordinatorPhone;
+    }
+
+    public List<JobType> getPreferedJobs() {
+        return preferedJobs;
+    }
+
+    public void setPreferedJobs(List<JobType> preferedJobs) {
+        this.preferedJobs = preferedJobs;
     }
 }
