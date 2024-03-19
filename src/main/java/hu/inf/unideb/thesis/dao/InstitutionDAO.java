@@ -2,6 +2,7 @@ package hu.inf.unideb.thesis.dao;
 
 import com.fasterxml.jackson.databind.cfg.ContextAttributes;
 import hu.inf.unideb.thesis.entity.Institution;
+import hu.inf.unideb.thesis.entity.JobType;
 import hu.inf.unideb.thesis.repositories.InstitutionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -53,7 +54,7 @@ public class InstitutionDAO implements DAO<Institution>{
             Institution test = new Institution();
             test.setName("TestInstitution");
             test.setLocation("testLocation");
-            test.setType("testType");
+            test.setType(new JobType("TestInstitutionType"));
             save(test);
         }
     }

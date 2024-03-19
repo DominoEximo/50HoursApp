@@ -11,7 +11,8 @@ public class Institution {
 
     private String name;
 
-    private String type;
+    @ManyToOne(cascade = CascadeType.ALL)
+    private JobType type;
 
     private String location;
 
@@ -21,7 +22,7 @@ public class Institution {
     public Institution() {
     }
 
-    public Institution(Long id,String name, String type, String location) {
+    public Institution(Long id,String name, JobType type, String location) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -44,11 +45,11 @@ public class Institution {
         this.name = name;
     }
 
-    public String getType() {
+    public JobType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(JobType type) {
         this.type = type;
     }
 

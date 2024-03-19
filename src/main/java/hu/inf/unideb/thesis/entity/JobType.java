@@ -1,12 +1,15 @@
 package hu.inf.unideb.thesis.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
 public class JobType {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String name;
@@ -16,6 +19,10 @@ public class JobType {
 
     public JobType(Long id, String name) {
         this.id = id;
+        this.name = name;
+    }
+
+    public JobType(String name) {
         this.name = name;
     }
 
