@@ -61,8 +61,8 @@ public class ContractServiceImpl implements ContractService {
             test.setCompleted(false);
             test.setStartDate(new Date(2024,3,4));
             test.setEndDate(new Date(2024,6,1));
-            if (userDAO.findByName("user") != null){
-                test.setStudent(userDAO.findByName("user"));
+            if (userDAO.findByUsername("user") != null){
+                test.setStudent(userDAO.findByUsername("user"));
             }
             if (institutionDAO.findByName("TestInstitution") != null){
                 test.setInstitution(institutionDAO.findByName("TestInstitution"));

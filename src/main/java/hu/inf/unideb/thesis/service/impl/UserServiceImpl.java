@@ -1,7 +1,6 @@
 package hu.inf.unideb.thesis.service.impl;
 
 import hu.inf.unideb.thesis.dao.UserDAO;
-import hu.inf.unideb.thesis.entity.Institution;
 import hu.inf.unideb.thesis.entity.User;
 import hu.inf.unideb.thesis.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByName(String name) {
-        return userDAO.findByName(name);
+        return userDAO.findByUsername(name);
     }
 
     @Override

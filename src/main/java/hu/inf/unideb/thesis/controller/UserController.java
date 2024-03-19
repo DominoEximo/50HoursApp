@@ -33,7 +33,7 @@ public class UserController {
     public CompletableFuture<ResponseEntity<String>> registerUser(@RequestBody User user){
         return CompletableFuture.supplyAsync(() -> {
 
-            if(userService.findByName(user.getName()) != null){
+            if(userService.findByName(user.getUsername()) != null){
                 throw new RuntimeException(USERALREADYEXISTMESSAGE);
             }
             else {
@@ -80,7 +80,7 @@ public class UserController {
     public CompletableFuture<Void> saveUser(@RequestBody User user){
 
         return CompletableFuture.supplyAsync(() -> {
-            if (userService.findByName(user.getName()) == null && userService.findById(user.getId()) == null){
+            if (userService.findByName(user.getUsername()) == null && userService.findById(user.getId()) == null){
                 userService.save(user);
                 return null;
             }
