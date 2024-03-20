@@ -4,6 +4,8 @@ import hu.inf.unideb.thesis.dao.UserDAO;
 import hu.inf.unideb.thesis.entity.User;
 import hu.inf.unideb.thesis.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +25,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByName(String name) {
         return userDAO.findByUsername(name);
+    }
+
+    @Override
+    public Page<User> findByRole(String role, Pageable pageable) {
+        return userDAO.getUsersByRole(role, pageable);
     }
 
     @Override

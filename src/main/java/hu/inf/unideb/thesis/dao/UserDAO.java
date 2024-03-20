@@ -5,7 +5,9 @@ import hu.inf.unideb.thesis.entity.User;
 import hu.inf.unideb.thesis.repositories.RoleRepository;
 import hu.inf.unideb.thesis.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -39,6 +41,14 @@ public class UserDAO implements DAO<User>{
     @Override
     public List<User> getAll() {
         return userRepository.findAll();
+    }
+
+    public Page<User> getUsersByRole(String role, Pageable pageable) {
+        if (role != null) {
+            return userRepository.findByRolesName(role, pageable);
+        } else {
+            return userRepository.findAll(pageable);
+        }
     }
 
     @Override

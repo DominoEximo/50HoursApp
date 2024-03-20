@@ -5,6 +5,9 @@ import hu.inf.unideb.thesis.entity.User;
 import hu.inf.unideb.thesis.service.RoleService;
 import hu.inf.unideb.thesis.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,12 +47,14 @@ public class UserController {
         });
 
     }
-
     @GetMapping(value = "/users",produces = "application/json")
-    public CompletableFuture<List<User>> getUsers(){
+    public CompletableFuture<ResponseEntity<Page<User>>> getUsersByRole(
+            @RequestParam(name = "role", required = false) String role, Pageable pageable) {
 
-        return CompletableFuture.supplyAsync(() -> userService.findAll());
+        Page<User> users = userService.findByRole(role, pageable);
+        return CompletableFuture.supplyAsync(() -> ResponseEntity.ok(users));
     }
+
 
     @GetMapping(value = "/users/{id}", produces = "application/json")
     public CompletableFuture<User> getUserById(@PathVariable Long id) {

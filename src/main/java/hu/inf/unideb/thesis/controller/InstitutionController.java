@@ -31,11 +31,11 @@ public class InstitutionController {
         institutionService.setUpMockedData();
     }
 
-    @GetMapping(value = "/institutions",produces = "application/json")
+    /*@GetMapping(value = "/institutions",produces = "application/json")
     public CompletableFuture<List<Institution>> getInstitutions(){
         return  CompletableFuture.supplyAsync(() -> institutionService.findAll());
 
-    }
+    }*/
 
     @GetMapping(value = "/institutions")
     public CompletableFuture<ResponseEntity<Page<Institution>>> getFilteredInstitutions(
