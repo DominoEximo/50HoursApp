@@ -19,14 +19,19 @@ public class Institution {
     @OneToOne
     private User contact;
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "description_id", referencedColumnName = "id")
+    private Description description;
+
     public Institution() {
     }
 
-    public Institution(Long id,String name, JobType type, String location) {
+    public Institution(Long id,String name, JobType type, String location, Description description) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.location = location;
+        this.description = description;
     }
 
     public Long getId() {
@@ -67,5 +72,13 @@ public class Institution {
 
     public void setContact(User contact) {
         this.contact = contact;
+    }
+
+    public Description getDescription() {
+        return description;
+    }
+
+    public void setDescription(Description description) {
+        this.description = description;
     }
 }

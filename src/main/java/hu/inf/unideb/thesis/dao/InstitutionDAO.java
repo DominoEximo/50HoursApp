@@ -1,6 +1,7 @@
 package hu.inf.unideb.thesis.dao;
 
 import com.fasterxml.jackson.databind.cfg.ContextAttributes;
+import hu.inf.unideb.thesis.entity.Description;
 import hu.inf.unideb.thesis.entity.Institution;
 import hu.inf.unideb.thesis.entity.JobType;
 import hu.inf.unideb.thesis.repositories.InstitutionRepository;
@@ -55,6 +56,10 @@ public class InstitutionDAO implements DAO<Institution>{
             test.setName("TestInstitution");
             test.setLocation("testLocation");
             test.setType(new JobType("TestInstitutionType"));
+            Description testDescription = new Description();
+            testDescription.setText("This is a test Description for the purpose of testing this description");
+            testDescription.setLinks(List.of("https://outlook.office.com/mail/","https://www.youtube.com/watch?v=gEFM5EoE4x4"));
+            test.setDescription(testDescription);
             save(test);
         }
     }
