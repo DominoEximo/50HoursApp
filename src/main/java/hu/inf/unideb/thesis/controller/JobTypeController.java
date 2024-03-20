@@ -55,7 +55,7 @@ public class JobTypeController {
         });
     }
 
-    @PostMapping(value = "jobTypes/{id}",consumes = "application/json")
+    @PostMapping(value = "/jobTypes",consumes = "application/json")
     public CompletableFuture<Void> saveJobTypeById(@RequestBody JobType jobType){
 
         return CompletableFuture.supplyAsync(() -> {

@@ -1,11 +1,12 @@
 package hu.inf.unideb.thesis.dao;
 
-import com.fasterxml.jackson.databind.cfg.ContextAttributes;
 import hu.inf.unideb.thesis.entity.Description;
 import hu.inf.unideb.thesis.entity.Institution;
 import hu.inf.unideb.thesis.entity.JobType;
 import hu.inf.unideb.thesis.repositories.InstitutionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class InstitutionDAO implements DAO<Institution>{
 
     @Autowired
     InstitutionRepository institutionRepository;
+
 
     @Override
     public Institution findById(long id) {
@@ -48,6 +50,15 @@ public class InstitutionDAO implements DAO<Institution>{
 
     public Institution findByName(String name){
         return institutionRepository.findByName(name);
+    }
+
+    public Page<Institution> getFilteredInstitution(String jobType, Pageable pageable){
+        if (jobType != null){
+            return institutionRepository.findByType(jobType,pageable);
+        }
+        else {
+            return institutionRepository.findAll(pageable);
+        }
     }
 
     public void setUpMockedData(){

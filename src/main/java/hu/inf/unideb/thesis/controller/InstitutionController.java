@@ -4,6 +4,9 @@ import hu.inf.unideb.thesis.entity.Institution;
 
 import hu.inf.unideb.thesis.service.InstitutionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.RequestScope;
 
@@ -32,6 +35,14 @@ public class InstitutionController {
     public CompletableFuture<List<Institution>> getInstitutions(){
         return  CompletableFuture.supplyAsync(() -> institutionService.findAll());
 
+    }
+
+    @GetMapping(value = "/institutions")
+    public CompletableFuture<ResponseEntity<Page<Institution>>> getFilteredInstitutions(
+            @RequestParam(name = "jobType", required = false) String jobType,
+            Pageable pageable) {
+        Page<Institution> institutions = institutionService.findByJobType(jobType, pageable);
+        return CompletableFuture.supplyAsync(() -> ResponseEntity.ok(institutions));
     }
 
     @GetMapping(value = "/institutions/{id}")
