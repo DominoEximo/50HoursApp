@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAllPaginated(int pageNumber, int pageSize) {
-        return (List<User>) userDAO.getAllPaginated(pageNumber,pageSize);
+        return userDAO.getAllPaginated(pageNumber,pageSize);
     }
 
     @Override

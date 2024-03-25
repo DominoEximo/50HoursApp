@@ -82,12 +82,12 @@ public class UserController {
     }
 
     @PostMapping(value = "/users", consumes = "application/json")
-    public CompletableFuture<Void> saveUser(@RequestBody User user){
+    public CompletableFuture<ResponseEntity<User>> saveUser(@RequestBody User user){
 
         return CompletableFuture.supplyAsync(() -> {
             if (userService.findByName(user.getUsername()) == null && userService.findById(user.getId()) == null){
                 userService.save(user);
-                return null;
+                return ResponseEntity.status(HttpStatus.CREATED).body(user);
             }
             else {
                 throw new RuntimeException(USERALREADYEXISTMESSAGE);
