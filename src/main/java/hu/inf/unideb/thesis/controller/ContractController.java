@@ -3,6 +3,7 @@ package hu.inf.unideb.thesis.controller;
 import hu.inf.unideb.thesis.entity.Contract;
 import hu.inf.unideb.thesis.service.ContractService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.RequestScope;
 
@@ -26,63 +27,51 @@ public class ContractController {
     }
 
     @GetMapping(value = "/contracts",produces = "application/json")
-    public CompletableFuture<List<Contract>> getContracts(){
+    public CompletableFuture<ResponseEntity<List<Contract>>> getContracts(){
 
-        return  CompletableFuture.supplyAsync(() -> contractService.findAll());
+        return  CompletableFuture.supplyAsync(() -> ResponseEntity.ok(contractService.findAll()));
 
     }
 
     @GetMapping(value = "/contracts/{id}",produces = "application/json")
-    public CompletableFuture<Contract> getContractById(@PathVariable Long id){
-        return  CompletableFuture.supplyAsync(() -> contractService.findById(id));
+    public CompletableFuture<ResponseEntity<Contract>> getContractById(@PathVariable Long id){
+        return  CompletableFuture.supplyAsync(() ->ResponseEntity.ok(contractService.findById(id)));
 
 
     }
 
 
     @PostMapping(value = "/contracts",consumes = "application/json")
-    public CompletableFuture<Void> saveContract(@RequestBody Contract contract){
+    public CompletableFuture<ResponseEntity<Contract>> saveContract(@RequestBody Contract contract){
 
         return  CompletableFuture.supplyAsync(() -> {
             if (contractService.findById(contract.getId()) == null){
-
-                contractService.save(contract);
-                return null;
-
+                return ResponseEntity.ok(contractService.save(contract));
             }
             else {
                 throw new RuntimeException("Duplicate contract exception");
             }
         });
-
-
     }
 
     @DeleteMapping(value = "/contracts/{id}")
-    public CompletableFuture<Void> deleteContract(@PathVariable Long id){
+    public CompletableFuture<ResponseEntity<Void>> deleteContract(@PathVariable Long id){
         return  CompletableFuture.supplyAsync(() -> {
             if (contractService.findById(id) != null){
-
                 contractService.delete(contractService.findById(id));
-                return null;
-
+                return ResponseEntity.ok(null);
             }
             else {
-
                 throw new RuntimeException("Contract not found");
-
             }
         });
-
-
     }
 
     @PutMapping(value = "/contracts/{id}", consumes = "application/json")
-    public CompletableFuture<Void> updateContract(@PathVariable Long id, @RequestBody Contract contract){
+    public CompletableFuture<ResponseEntity<Contract>> updateContract(@PathVariable Long id, @RequestBody Contract contract){
         return  CompletableFuture.supplyAsync(() -> {
             if (contractService.findById(id) != null) {
-                contractService.update(id, contract);
-                return null;
+                return ResponseEntity.ok(contractService.update(id, contract));
             }
             else {
                 throw new RuntimeException(CONTRACTNOTFOUNDMESSAGE);

@@ -29,8 +29,8 @@ public class ContractDAO implements DAO<Contract>{
     }
 
     @Override
-    public void save(Contract contract) {
-        contractRepository.save(contract);
+    public Contract save(Contract contract) {
+        return contractRepository.save(contract);
     }
 
     @Override

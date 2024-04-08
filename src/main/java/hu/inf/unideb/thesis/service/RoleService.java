@@ -12,9 +12,9 @@ public interface RoleService {
 
     List<Role> findAll();
 
-    void save(Role role);
+    Role save(Role role);
 
-    void update(Long id, Role role);
+    Role update(Long id, Role role);
 
     void delete(Role role);
 

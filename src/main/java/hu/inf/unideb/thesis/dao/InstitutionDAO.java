@@ -34,8 +34,8 @@ public class InstitutionDAO implements DAO<Institution>{
     }
 
     @Override
-    public void save(Institution institution) {
-        institutionRepository.save(institution);
+    public Institution save(Institution institution) {
+        return institutionRepository.save(institution);
     }
 
     @Override

@@ -57,11 +57,11 @@ public class UserController {
 
 
     @GetMapping(value = "/users/{id}", produces = "application/json")
-    public CompletableFuture<User> getUserById(@PathVariable Long id) {
+    public CompletableFuture<ResponseEntity<User>> getUserById(@PathVariable Long id) {
         return CompletableFuture.supplyAsync(() -> {
             User user = userService.findById(id);
             if (user != null) {
-                return user;
+                return ResponseEntity.ok(user);
             } else {
                 throw new RuntimeException(USERNOTFOUNDMESSAGE);
             }
@@ -69,12 +69,12 @@ public class UserController {
     }
 
     @DeleteMapping(value = "/users/{id}")
-    public CompletableFuture<Void> deleteUserById(@PathVariable Long id) {
+    public CompletableFuture<ResponseEntity<Void>> deleteUserById(@PathVariable Long id) {
         return CompletableFuture.supplyAsync(() -> {
             User user = userService.findById(id);
             if (user != null) {
                 userService.delete(user);
-                return null;
+                return ResponseEntity.ok(null);
             } else {
                 throw new RuntimeException(USERNOTFOUNDMESSAGE);
             }
@@ -87,7 +87,7 @@ public class UserController {
         return CompletableFuture.supplyAsync(() -> {
             if (userService.findByName(user.getUsername()) == null && userService.findById(user.getId()) == null){
                 userService.save(user);
-                return ResponseEntity.status(HttpStatus.CREATED).body(user);
+                return ResponseEntity.status(201).body(user);
             }
             else {
                 throw new RuntimeException(USERALREADYEXISTMESSAGE);
@@ -97,13 +97,7 @@ public class UserController {
     }
 
     @PutMapping(value = "/users/{id}", consumes = "application/json")
-    public CompletableFuture<Void> updateUser(@PathVariable Long id, @RequestBody User user){
-
-        return CompletableFuture.supplyAsync(() -> {
-                userService.update(id,user);
-                return null;
-        });
-
-
+    public CompletableFuture<ResponseEntity<User>> updateUser(@PathVariable Long id, @RequestBody User user){
+        return CompletableFuture.supplyAsync(() -> ResponseEntity.status(204).body( userService.update(id,user)));
     }
 }

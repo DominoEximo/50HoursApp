@@ -4,6 +4,7 @@ import hu.inf.unideb.thesis.entity.JobType;
 import hu.inf.unideb.thesis.entity.User;
 import hu.inf.unideb.thesis.service.JobTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.RequestScope;
 
@@ -24,17 +25,17 @@ public class JobTypeController {
     JobTypeService jobTypeService;
 
     @GetMapping(value = "/jobTypes",produces = "application/json")
-    public CompletableFuture<List<JobType>> getJobTypes(){
-        return CompletableFuture.supplyAsync(() -> jobTypeService.findAll());
+    public CompletableFuture<ResponseEntity<List<JobType>>> getJobTypes(){
+        return CompletableFuture.supplyAsync(() -> ResponseEntity.ok(jobTypeService.findAll()));
     }
 
     @GetMapping(value = "/jobTypes/{id}", produces = "application/json")
-    public CompletableFuture<JobType> getJobTypeById(@PathVariable Long id){
+    public CompletableFuture<ResponseEntity<JobType>> getJobTypeById(@PathVariable Long id){
 
         return CompletableFuture.supplyAsync(() -> {
             JobType jobType = jobTypeService.findById(id);
             if (jobType != null) {
-                return jobType;
+                return ResponseEntity.ok(jobType);
             } else {
                 throw new RuntimeException(JOBTPYENOTFOUNDMESSAGE);
             }
@@ -43,12 +44,12 @@ public class JobTypeController {
     }
 
     @DeleteMapping(value = "/jobTypes/{id}")
-    public CompletableFuture<Void> deleteJobTypeById(@PathVariable Long id){
+    public CompletableFuture<ResponseEntity<Void>> deleteJobTypeById(@PathVariable Long id){
         return CompletableFuture.supplyAsync(() -> {
             JobType jobType = jobTypeService.findById(id);
             if (jobType != null) {
                 jobTypeService.delete(jobType);
-                return null;
+                return ResponseEntity.ok(null);
             } else {
                 throw new RuntimeException(JOBTPYENOTFOUNDMESSAGE);
             }
@@ -56,12 +57,11 @@ public class JobTypeController {
     }
 
     @PostMapping(value = "/jobTypes",consumes = "application/json")
-    public CompletableFuture<Void> saveJobTypeById(@RequestBody JobType jobType){
+    public CompletableFuture<ResponseEntity<JobType>> saveJobTypeById(@RequestBody JobType jobType){
 
         return CompletableFuture.supplyAsync(() -> {
             if (jobTypeService.findByName(jobType.getName()) == null && jobTypeService.findById(jobType.getId()) == null){
-                jobTypeService.save(jobType);
-                return null;
+                return ResponseEntity.status(201).body(jobTypeService.save(jobType));
             }
             else {
                 throw new RuntimeException(JOBTYPEALREADYEXISTS);
@@ -70,12 +70,10 @@ public class JobTypeController {
     }
 
     @PutMapping(value = "/jobTypes/{id}", consumes = "application/json")
-    public CompletableFuture<Void> updateJobType(@PathVariable Long id, @RequestBody JobType jobType){
+    public CompletableFuture<ResponseEntity<JobType>> updateJobType(@PathVariable Long id, @RequestBody JobType jobType){
 
-        return CompletableFuture.supplyAsync(() -> {
-            jobTypeService.update(id,jobType);
-            return null;
-        });
+        return CompletableFuture.supplyAsync(() -> ResponseEntity.status(204).body(jobTypeService.update(id,jobType)));
+
 
     }
 

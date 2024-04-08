@@ -29,14 +29,14 @@ public class JobTypeServiceImpl implements JobTypeService {
     }
 
     @Override
-    public void save(JobType jobType) {
-        jobTypeDAO.save(jobType);
+    public JobType save(JobType jobType) {
+        return jobTypeDAO.save(jobType);
     }
 
     @Override
-    public void update(Long id, JobType jobType) {
+    public JobType update(Long id, JobType jobType) {
         if (jobTypeDAO.findById(id) != null){
-            jobTypeDAO.update(jobType);
+            return jobTypeDAO.update(jobType);
         }
         else {
             throw new RuntimeException("Could not find Job Type");

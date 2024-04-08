@@ -11,9 +11,9 @@ public interface ContractService {
 
     List<Contract> findAll();
 
-    void save(Contract contract);
+    Contract save(Contract contract);
 
-    void update(Long id, Contract contract);
+    Contract update(Long id, Contract contract);
 
     void delete(Contract contract);
 

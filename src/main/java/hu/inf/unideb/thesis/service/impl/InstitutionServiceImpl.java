@@ -43,15 +43,15 @@ public class InstitutionServiceImpl implements InstitutionService {
     }
 
     @Override
-    public void save(Institution institution) {
-        institutionDAO.save(institution);
+    public Institution save(Institution institution) {
+        return institutionDAO.save(institution);
     }
 
     @Override
-    public void update(Long id, Institution institution) {
+    public Institution update(Long id, Institution institution) {
 
         if (institutionDAO.findById(id) != null){
-            institutionDAO.update(institution);
+            return institutionDAO.update(institution);
         }
         else {
             throw new RuntimeException("Could not find institution");

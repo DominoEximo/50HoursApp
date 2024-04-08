@@ -39,8 +39,8 @@ public class JobTypeDAO implements DAO<JobType>{
     }
 
     @Override
-    public void save(JobType jobType) {
-        jobTypeRepository.save(jobType);
+    public JobType save(JobType jobType) {
+        return jobTypeRepository.save(jobType);
     }
 
     @Override

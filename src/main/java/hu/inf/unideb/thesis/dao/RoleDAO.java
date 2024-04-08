@@ -33,8 +33,8 @@ public class RoleDAO implements DAO<Role>{
     }
 
     @Override
-    public void save(Role role) {
-        roleRepository.save(role);
+    public Role save(Role role) {
+        return roleRepository.save(role);
     }
 
     @Override

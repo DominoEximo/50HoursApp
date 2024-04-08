@@ -52,8 +52,8 @@ public class UserDAO implements DAO<User>{
     }
 
     @Override
-    public void save(User user) {
-        userRepository.save(user);
+    public User save(User user) {
+        return userRepository.save(user);
     }
 
     @Override

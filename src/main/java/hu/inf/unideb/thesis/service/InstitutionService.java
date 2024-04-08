@@ -17,9 +17,9 @@ public interface InstitutionService {
 
     List<Institution> findAll();
 
-    void save(Institution institution);
+    Institution save(Institution institution);
 
-    void update(Long id, Institution institution);
+    Institution update(Long id, Institution institution);
 
     void delete(Institution institution);
 

@@ -33,15 +33,15 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public void save(Contract contract) {
-        contractDAO.save(contract);
+    public Contract save(Contract contract) {
+        return contractDAO.save(contract);
     }
 
     @Override
-    public void update(Long id,Contract contract) {
+    public Contract update(Long id,Contract contract) {
 
         if (contractDAO.findById(id) != null){
-            contractDAO.update(contract);
+            return contractDAO.update(contract);
         }
         else {
             throw new RuntimeException("Could not find contract");

@@ -31,15 +31,15 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public void save(Role role) {
-        roleDAO.save(role);
+    public Role save(Role role) {
+        return roleDAO.save(role);
     }
 
     @Override
-    public void update(Long id, Role role) {
+    public Role update(Long id, Role role) {
 
         if (roleDAO.findById(id) != null){
-            roleDAO.update(role);
+            return roleDAO.update(role);
         }
         else {
             throw new RuntimeException("Could not find role");

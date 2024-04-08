@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.RequestScope;
 
-import java.util.List;
+import java.net.URI;
 import java.util.concurrent.CompletableFuture;
 
 @RestController("/institution")
@@ -31,12 +31,6 @@ public class InstitutionController {
         institutionService.setUpMockedData();
     }
 
-    /*@GetMapping(value = "/institutions",produces = "application/json")
-    public CompletableFuture<List<Institution>> getInstitutions(){
-        return  CompletableFuture.supplyAsync(() -> institutionService.findAll());
-
-    }*/
-
     @GetMapping(value = "/institutions")
     public CompletableFuture<ResponseEntity<Page<Institution>>> getFilteredInstitutions(
             @RequestParam(name = "jobType", required = false) String jobType,
@@ -46,12 +40,12 @@ public class InstitutionController {
     }
 
     @GetMapping(value = "/institutions/{id}")
-    public CompletableFuture<Institution> getInstitutionById(@PathVariable Long id){
+    public CompletableFuture<ResponseEntity<Institution>> getInstitutionById(@PathVariable Long id){
 
         return  CompletableFuture.supplyAsync(() -> {
             if (institutionService.findById(id) != null){
 
-                return institutionService.findById(id);
+                return ResponseEntity.ok(institutionService.findById(id));
 
             }
             else {
@@ -61,13 +55,11 @@ public class InstitutionController {
     }
 
     @PostMapping(value = "/institutions", consumes = "application/json")
-    public CompletableFuture<Void> saveInstitution(@RequestBody Institution institution){
+    public CompletableFuture<ResponseEntity<Institution>> saveInstitution(@RequestBody Institution institution){
 
         return  CompletableFuture.supplyAsync(() -> {
             if (institutionService.findById(institution.getId()) == null){
-
-                institutionService.save(institution);
-                return null;
+                return ResponseEntity.status(201).body(institutionService.save(institution));
             }
             else {
 
@@ -81,33 +73,24 @@ public class InstitutionController {
     }
 
     @DeleteMapping("/institutions/{id}")
-    public CompletableFuture<Void> deleteInstitutionById(@PathVariable Long id){
+    public CompletableFuture<ResponseEntity<Void>> deleteInstitutionById(@PathVariable Long id){
 
         return  CompletableFuture.supplyAsync(() -> {
-
             if (institutionService.findById(id) != null){
-
                 institutionService.delete(institutionService.findById(id));
-                return  null;
+                return ResponseEntity.ok(null);
             }
             else {
-
                 throw new RuntimeException(INSTITUTIONNOTFOUNDMESSAGE);
-
             }
         });
 
     }
 
     @PutMapping(value = "/institutions/{id}", consumes = "application/json")
-    public CompletableFuture<Void> updateInstitution(@PathVariable Long id, @RequestBody Institution institution){
+    public CompletableFuture<ResponseEntity<Institution>> updateInstitution(@PathVariable Long id, @RequestBody Institution institution){
 
-        return  CompletableFuture.supplyAsync(() -> {
-
-            institutionService.update(id,institution);
-            return null;
-
-        });
+        return  CompletableFuture.supplyAsync(() -> ResponseEntity.status(204).body(institutionService.update(id,institution)));
 
     }
 

@@ -13,9 +13,9 @@ public interface JobTypeService {
 
     List<JobType> findAll();
 
-    void save(JobType jobType);
+    JobType save(JobType jobType);
 
-    void update(Long id, JobType jobType);
+    JobType update(Long id, JobType jobType);
 
     void delete(JobType jobType);
 
