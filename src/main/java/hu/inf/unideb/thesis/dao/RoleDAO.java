@@ -52,7 +52,7 @@ public class RoleDAO implements DAO<Role>{
     }
 
     public void setUpMockedData(){
-        if(findByName("USER") == null ){
+        if(getAll().isEmpty()){
             save(new Role("BACKOFFICE"));
             save(new Role("USER"));
         }

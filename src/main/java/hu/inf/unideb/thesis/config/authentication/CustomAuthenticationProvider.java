@@ -29,12 +29,10 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             throw new UsernameNotFoundException("User not found");
         }
 
-        // Your custom authentication logic
+
         if (password.equals(userDetails.getPassword())) {
-            // Authentication successful
             return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         } else {
-            // Authentication failed
             throw new RuntimeException("Invalid credentials");
 
         }

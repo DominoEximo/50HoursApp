@@ -75,7 +75,7 @@ public class UserDAO implements DAO<User>{
     }
 
     public void setUpMockedData(){
-        if (findByUsername("user") == null){
+        if (getAll().isEmpty()){
             List<Role> userRoles = new ArrayList<>();
             userRoles.add(roleRepository.findByName("USER"));
             List<Role> bacofficeRoles = new ArrayList<>();
