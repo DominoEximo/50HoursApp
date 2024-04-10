@@ -1,12 +1,12 @@
 package hu.inf.unideb.thesis.controller;
 
-import hu.inf.unideb.thesis.entity.Institution;
+import hu.inf.unideb.thesis.entity.Location;
 import hu.inf.unideb.thesis.entity.User;
+import hu.inf.unideb.thesis.service.GeocodingService;
 import hu.inf.unideb.thesis.service.RoleService;
 import hu.inf.unideb.thesis.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +31,9 @@ public class UserController {
     @Autowired
     RoleService roleService;
 
+    @Autowired
+    GeocodingService geocodingService;
+
 
     @PostMapping(value = "/users/signup",produces = "application/json")
     public CompletableFuture<ResponseEntity<String>> registerUser(@RequestBody User user){
@@ -41,8 +44,14 @@ public class UserController {
             }
             else {
                 user.setRoles(List.of(roleService.findByName("USER")));
+
+                String address = user.getLocation().getStreet();
+                Location responseLocation = geocodingService.geocodeAddress(address);
+                user.getLocation().setLat(responseLocation.getLat());
+                user.getLocation().setLon(responseLocation.getLon());
+
                 userService.save(user);
-                return new ResponseEntity<>(HttpStatus.OK);
+                return new ResponseEntity<>(HttpStatus.CREATED);
             }
         });
 
@@ -86,6 +95,9 @@ public class UserController {
 
         return CompletableFuture.supplyAsync(() -> {
             if (userService.findByName(user.getUsername()) == null && userService.findById(user.getId()) == null){
+
+
+
                 userService.save(user);
                 return ResponseEntity.status(201).body(user);
             }
@@ -98,6 +110,12 @@ public class UserController {
 
     @PutMapping(value = "/users/{id}", consumes = "application/json")
     public CompletableFuture<ResponseEntity<User>> updateUser(@PathVariable Long id, @RequestBody User user){
+
+        String address = user.getLocation().getStreet();
+        Location responseLocation = geocodingService.geocodeAddress(address);
+        user.getLocation().setLat(responseLocation.getLat());
+        user.getLocation().setLon(responseLocation.getLon());
+
         return CompletableFuture.supplyAsync(() -> ResponseEntity.status(204).body( userService.update(id,user)));
     }
 }

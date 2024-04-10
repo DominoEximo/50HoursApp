@@ -3,6 +3,7 @@ package hu.inf.unideb.thesis.dao;
 import hu.inf.unideb.thesis.entity.Description;
 import hu.inf.unideb.thesis.entity.Institution;
 import hu.inf.unideb.thesis.entity.JobType;
+import hu.inf.unideb.thesis.entity.Location;
 import hu.inf.unideb.thesis.repositories.InstitutionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -65,7 +66,7 @@ public class InstitutionDAO implements DAO<Institution>{
         if (findByName("TestInstitution") == null){
             Institution test = new Institution();
             test.setName("TestInstitution");
-            test.setLocation("testLocation");
+            test.setLocation(new Location());
             test.setType(new JobType("TestInstitutionType"));
             Description testDescription = new Description();
             testDescription.setText("This is a test Description for the purpose of testing this description");

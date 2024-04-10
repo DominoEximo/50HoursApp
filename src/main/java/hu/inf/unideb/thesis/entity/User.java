@@ -50,6 +50,9 @@ public class User {
                     name = "role_id", referencedColumnName = "id"))
     private List<Role> roles;
 
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Location location;
+
 
     public User() {
         this.preferedJobs = new ArrayList<>();
@@ -190,5 +193,13 @@ public class User {
 
     public void setPreferedJobs(List<JobType> preferedJobs) {
         this.preferedJobs = preferedJobs;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 }

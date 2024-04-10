@@ -14,7 +14,8 @@ public class Institution {
     @ManyToOne(cascade = CascadeType.ALL)
     private JobType type;
 
-    private String location;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Location location;
 
     @OneToOne
     private User contact;
@@ -26,7 +27,7 @@ public class Institution {
     public Institution() {
     }
 
-    public Institution(Long id,String name, JobType type, String location, Description description) {
+    public Institution(Long id,String name, JobType type, Location location, Description description) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -58,11 +59,11 @@ public class Institution {
         this.type = type;
     }
 
-    public String getLocation() {
+    public Location getLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(Location location) {
         this.location = location;
     }
 

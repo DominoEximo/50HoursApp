@@ -1,6 +1,7 @@
 package hu.inf.unideb.thesis.repositories;
 
 import hu.inf.unideb.thesis.entity.Institution;
+import hu.inf.unideb.thesis.entity.Location;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,7 +16,7 @@ import java.util.List;
 @Repository
 public interface InstitutionRepository extends PagingAndSortingRepository<Institution, Long>, JpaRepository<Institution, Long> {
 
-    List<Institution> findByLocation(String location);
+    List<Institution> findByLocation(Location location);
 
     Institution findByName(String name);
 
