@@ -2,14 +2,20 @@ package hu.inf.unideb.thesis.unit.contract;
 
 import hu.inf.unideb.thesis.entity.Contract;
 import hu.inf.unideb.thesis.service.ContractService;
+import hu.inf.unideb.thesis.service.InstitutionService;
+import hu.inf.unideb.thesis.service.UserService;
 import jakarta.transaction.Transactional;
 import org.junit.Assert;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.stream.Collectors;
 
 
 @ExtendWith(SpringExtension.class)
@@ -21,11 +27,23 @@ public class ContractServiceTest {
     @Autowired
     ContractService contractService;
 
+    @Autowired
+    InstitutionService institutionService;
+
+    @Autowired
+    UserService userService;
+
+    @AfterEach
+    public void flushContracts(){
+        for (Contract contract : contractService.findAll()){
+            contractService.delete(contract);
+        }
+    }
 
     @Test
     public void testGetContracts(){
 
-        Assert.assertEquals(0,contractService.findAll().size());
+        Assertions.assertEquals(0,contractService.findAll().size());
 
     }
 
@@ -38,7 +56,7 @@ public class ContractServiceTest {
 
         contractService.delete(newContract);
 
-        Assert.assertEquals(0, contractService.findAll().size());
+        Assertions.assertEquals(0, contractService.findAll().size());
 
     }
 
@@ -51,15 +69,15 @@ public class ContractServiceTest {
 
         contractService.save(newContract);
 
-        Contract temp = contractService.findById(1L);
+        Assertions.assertFalse(newContract.getCompleted());
 
-        Assert.assertFalse(contractService.findById(1L).getCompleted());
+        newContract.setCompleted(true);
 
-        temp.setCompleted(true);
+        System.out.println(contractService.findAll().stream().map(Contract::getId).collect(Collectors.toList()));
 
-        contractService.update(1L,temp);
+        contractService.update(newContract.getId(),newContract);
 
-        Assert.assertTrue(contractService.findById(1L).getCompleted());
+        Assertions.assertTrue(contractService.findById(newContract.getId()).getCompleted());
 
 
 
@@ -72,6 +90,24 @@ public class ContractServiceTest {
 
         contractService.save(newContract);
 
-        Assert.assertEquals(1,contractService.findAll().size());
+        Assertions.assertEquals(1,contractService.findAll().size());
+    }
+
+    @Test
+    public void testSettingUpMockedData(){
+        institutionService.setUpMockedData();
+        contractService.setUpMockedData();
+
+        Assertions.assertEquals(1,contractService.findAll().size());
+
+        //Duplicate call doesn't create new instance
+        contractService.setUpMockedData();
+
+        Assertions.assertEquals(1,contractService.findAll().size());
+
+        userService.delete(userService.findByName("user"));
+
+        //User is null
+        contractService.setUpMockedData();
     }
 }

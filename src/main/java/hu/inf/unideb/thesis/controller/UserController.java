@@ -45,10 +45,12 @@ public class UserController {
             else {
                 user.setRoles(List.of(roleService.findByName("USER")));
 
-                String address = user.getLocation().getStreet();
-                Location responseLocation = geocodingService.geocodeAddress(address);
-                user.getLocation().setLat(responseLocation.getLat());
-                user.getLocation().setLon(responseLocation.getLon());
+                if (user.getLocation() != null){
+                    String address = user.getLocation().getStreet();
+                    Location responseLocation = geocodingService.geocodeAddress(address);
+                    user.getLocation().setLat(responseLocation.getLat());
+                    user.getLocation().setLon(responseLocation.getLon());
+                }
 
                 userService.save(user);
                 return new ResponseEntity<>(HttpStatus.CREATED);
@@ -61,7 +63,7 @@ public class UserController {
             @RequestParam(name = "role", required = false) String role, Pageable pageable) {
 
         Page<User> users = userService.findByRole(role, pageable);
-        return CompletableFuture.supplyAsync(() -> ResponseEntity.ok(users));
+        return CompletableFuture.supplyAsync(() -> ResponseEntity.status(200).body(users));
     }
 
 
@@ -96,10 +98,13 @@ public class UserController {
         return CompletableFuture.supplyAsync(() -> {
             if (userService.findByName(user.getUsername()) == null && userService.findById(user.getId()) == null){
 
-                String address = user.getLocation().getStreet();
-                Location responseLocation = geocodingService.geocodeAddress(address);
-                user.getLocation().setLat(responseLocation.getLat());
-                user.getLocation().setLon(responseLocation.getLon());
+                if (user.getLocation() != null){
+                    String address = user.getLocation().getStreet();
+                    Location responseLocation = geocodingService.geocodeAddress(address);
+                    user.getLocation().setLat(responseLocation.getLat());
+                    user.getLocation().setLon(responseLocation.getLon());
+                }
+
 
                 userService.save(user);
                 return ResponseEntity.status(201).body(user);
@@ -114,10 +119,12 @@ public class UserController {
     @PutMapping(value = "/users/{id}", consumes = "application/json")
     public CompletableFuture<ResponseEntity<User>> updateUser(@PathVariable Long id, @RequestBody User user){
 
-        String address = user.getLocation().getStreet();
-        Location responseLocation = geocodingService.geocodeAddress(address);
-        user.getLocation().setLat(responseLocation.getLat());
-        user.getLocation().setLon(responseLocation.getLon());
+        if (user.getLocation() != null){
+            String address = user.getLocation().getStreet();
+            Location responseLocation = geocodingService.geocodeAddress(address);
+            user.getLocation().setLat(responseLocation.getLat());
+            user.getLocation().setLon(responseLocation.getLon());
+        }
 
         return CompletableFuture.supplyAsync(() -> ResponseEntity.status(204).body( userService.update(id,user)));
     }

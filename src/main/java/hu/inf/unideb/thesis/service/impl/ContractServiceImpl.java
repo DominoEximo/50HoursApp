@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 @Service
 public class ContractServiceImpl implements ContractService {
@@ -59,8 +60,10 @@ public class ContractServiceImpl implements ContractService {
         if (findAll().isEmpty()){
             Contract test = new Contract();
             test.setCompleted(false);
-            test.setStartDate(new Date(2024,3,4));
-            test.setEndDate(new Date(2024,6,1));
+            LocalDate startDate = LocalDate.of(2024, 4, 5);
+            test.setStartDate(Date.valueOf(startDate));
+            LocalDate endDate = LocalDate.of(2024, 10, 5);
+            test.setEndDate(Date.valueOf(endDate));
             if (userDAO.findByUsername("user") != null){
                 test.setStudent(userDAO.findByUsername("user"));
             }

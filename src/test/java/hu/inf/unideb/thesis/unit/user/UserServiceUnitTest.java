@@ -5,6 +5,7 @@ import hu.inf.unideb.thesis.service.RoleService;
 import hu.inf.unideb.thesis.service.UserService;
 import jakarta.transaction.Transactional;
 import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,7 +37,7 @@ public class UserServiceUnitTest {
     @Test
     public void testGetUsersByRoleWithPagination() {
 
-        Assert.assertEquals(userService.findByName("user").getId(),userService.findByRole("USER", Pageable.ofSize(1)).stream().findFirst().get().getId());
+        Assertions.assertEquals(userService.findByName("admin").getId(),userService.findByRole("BACKOFFICE", Pageable.ofSize(1)).stream().findFirst().get().getId());
 
     }
 
@@ -48,11 +49,11 @@ public class UserServiceUnitTest {
 
         userService.save(test);
 
-        Assert.assertEquals(3,userService.findAll().size());
+        Assertions.assertEquals(3,userService.findAll().size());
 
         userService.delete(userService.findByName("testUser"));
 
-        Assert.assertEquals(2,userService.findAll().size());
+        Assertions.assertEquals(2,userService.findAll().size());
     }
     @Test
     public void testUpdateUser(){
@@ -63,9 +64,17 @@ public class UserServiceUnitTest {
 
         userService.update(1L,temp);
 
-        Assert.assertEquals(temp.getId().longValue(),userService.findByName("newUsername").getId().longValue());
-        Assert.assertNull(userService.findByName("user"));
+        Assertions.assertEquals(temp.getId().longValue(),userService.findByName("newUsername").getId().longValue());
+        Assertions.assertNull(userService.findByName("user"));
 
+    }
+
+    @Test
+    public void testSettingUpMockedData(){
+
+        userService.setUpMockedData();
+
+        Assertions.assertEquals(2, userService.findAll().size());
     }
 
 }

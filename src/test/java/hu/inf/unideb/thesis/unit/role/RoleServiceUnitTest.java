@@ -4,6 +4,7 @@ import hu.inf.unideb.thesis.entity.Role;
 import hu.inf.unideb.thesis.service.RoleService;
 import jakarta.transaction.Transactional;
 import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,7 +30,7 @@ public class RoleServiceUnitTest {
     @Test
     public void testGetRoles(){
 
-        Assert.assertEquals(2,roleService.findAll().size());
+        Assertions.assertEquals(2,roleService.findAll().size());
 
     }
     @Test
@@ -37,11 +38,11 @@ public class RoleServiceUnitTest {
 
         roleService.save(new Role("test"));
 
-        Assert.assertEquals(3,roleService.findAll().size());
+        Assertions.assertEquals(3,roleService.findAll().size());
 
         roleService.delete(roleService.findByName("test"));
 
-        Assert.assertEquals(2,roleService.findAll().size());
+        Assertions.assertEquals(2,roleService.findAll().size());
 
     }
 
@@ -54,7 +55,15 @@ public class RoleServiceUnitTest {
 
         roleService.update(2L,temp);
 
-        Assert.assertEquals("NEWUSER",roleService.findById(2L).getName());
+        Assertions.assertEquals("NEWUSER",roleService.findById(2L).getName());
 
+    }
+
+    @Test
+    public void testSettingUpMockedData(){
+
+        roleService.setUpMockedData();
+
+        Assertions.assertEquals(2,roleService.findAll().size());
     }
 }
