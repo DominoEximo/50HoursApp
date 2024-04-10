@@ -96,7 +96,10 @@ public class UserController {
         return CompletableFuture.supplyAsync(() -> {
             if (userService.findByName(user.getUsername()) == null && userService.findById(user.getId()) == null){
 
-
+                String address = user.getLocation().getStreet();
+                Location responseLocation = geocodingService.geocodeAddress(address);
+                user.getLocation().setLat(responseLocation.getLat());
+                user.getLocation().setLon(responseLocation.getLon());
 
                 userService.save(user);
                 return ResponseEntity.status(201).body(user);

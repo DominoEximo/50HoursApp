@@ -56,7 +56,7 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public void setUpMockedData() {
-        if (findById(1L) == null){
+        if (findAll().isEmpty()){
             Contract test = new Contract();
             test.setCompleted(false);
             test.setStartDate(new Date(2024,3,4));

@@ -129,12 +129,9 @@ public class InstitutionController {
 
         User user = userService.findById(userId);
         if (user == null) {
-            // Handle case where user is not found
-            // You can return an appropriate error response or throw an exception
-            // For demonstration, let's return an empty list of institutions
             return List.of();
         }
-        // Call the service to find nearby institutions
+
         List<Institution> nearbyInstitutions = distanceCalculatorService.getInstitutionsByDistance(user.getLocation(), maxDistance);
 
         return nearbyInstitutions;
