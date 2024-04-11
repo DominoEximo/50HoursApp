@@ -75,11 +75,13 @@ public class InstitutionController {
         return  CompletableFuture.supplyAsync(() -> {
             if (institutionService.findById(institution.getId()) == null){
 
-                String address = institution.getLocation().getStreet();
-                Location responseLocation = geocodingService.geocodeAddress(address);
+                if (institution.getLocation() != null){
+                    String address = institution.getLocation().getStreet();
+                    Location responseLocation = geocodingService.geocodeAddress(address);
 
-                institution.getLocation().setLat(responseLocation.getLat());
-                institution.getLocation().setLon(responseLocation.getLon());
+                    institution.getLocation().setLat(responseLocation.getLat());
+                    institution.getLocation().setLon(responseLocation.getLon());
+                }
 
                 return ResponseEntity.status(201).body(institutionService.save(institution));
             }
@@ -112,28 +114,36 @@ public class InstitutionController {
     @PutMapping(value = "/institutions/{id}", consumes = "application/json")
     public CompletableFuture<ResponseEntity<Institution>> updateInstitution(@PathVariable Long id, @RequestBody Institution institution){
 
-        String address = institution.getLocation().getStreet();
-        Location responseLocation = geocodingService.geocodeAddress(address);
+        if (institution.getLocation() != null){
+            String address = institution.getLocation().getStreet();
+            Location responseLocation = geocodingService.geocodeAddress(address);
 
-        institution.getLocation().setLat(responseLocation.getLat());
-        institution.getLocation().setLon(responseLocation.getLon());
+            institution.getLocation().setLat(responseLocation.getLat());
+            institution.getLocation().setLon(responseLocation.getLon());
+        }
+
 
         return  CompletableFuture.supplyAsync(() -> ResponseEntity.status(204).body(institutionService.update(id,institution)));
 
     }
 
     @GetMapping("/institutions/nearby")
-    public List<Institution> getNearbyInstitutions(
+    public CompletableFuture<ResponseEntity<List<Institution>>> getNearbyInstitutions(
             @RequestParam("userId") long userId,
             @RequestParam("maxDistance") double maxDistance) {
 
         User user = userService.findById(userId);
+
+
         if (user == null) {
-            return List.of();
+            return CompletableFuture.supplyAsync(() -> ResponseEntity.status(200).body(List.of()));
         }
 
         List<Institution> nearbyInstitutions = distanceCalculatorService.getInstitutionsByDistance(user.getLocation(), maxDistance);
 
-        return nearbyInstitutions;
+        return CompletableFuture.supplyAsync(() -> ResponseEntity.status(200).body(nearbyInstitutions));
+
+
+
     }
 }

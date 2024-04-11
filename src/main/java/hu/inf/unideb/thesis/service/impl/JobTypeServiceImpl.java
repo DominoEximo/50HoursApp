@@ -51,13 +51,6 @@ public class JobTypeServiceImpl implements JobTypeService {
 
     @Override
     public void setUpMockedData() {
-        if (findByName("test") == null){
-            save(new JobType("test"));
-            save(new JobType("test2"));
-            save(new JobType("test3"));
-            save(new JobType("test4"));
-            save(new JobType("test5"));
-            save(new JobType("test6"));
-        }
+        jobTypeDAO.setUpMockedData();
     }
 }

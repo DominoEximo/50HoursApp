@@ -63,11 +63,15 @@ public class InstitutionDAO implements DAO<Institution>{
     }
 
     public void setUpMockedData(){
-        if (findByName("TestInstitution") == null){
+        if (getAll().isEmpty()){
             Institution test = new Institution();
             test.setName("TestInstitution");
-            test.setLocation(new Location());
-            test.setType(new JobType("TestInstitutionType"));
+            Location testLocation = new Location();
+            testLocation.setCountry("Hungary");
+            testLocation.setStreet("Budapest");
+            testLocation.setLat(47.497913);
+            testLocation.setLon(19.040236);
+            test.setLocation(testLocation);
             Description testDescription = new Description();
             testDescription.setText("This is a test Description for the purpose of testing this description");
             testDescription.setLinks(List.of("https://outlook.office.com/mail/","https://www.youtube.com/watch?v=gEFM5EoE4x4"));

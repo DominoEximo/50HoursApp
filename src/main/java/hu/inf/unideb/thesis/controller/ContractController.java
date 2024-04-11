@@ -10,6 +10,8 @@ import org.springframework.web.context.annotation.RequestScope;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import static org.springframework.web.servlet.function.ServerResponse.status;
+
 @RestController("/contract")
 @CrossOrigin
 @RequestScope
@@ -46,7 +48,7 @@ public class ContractController {
 
         return  CompletableFuture.supplyAsync(() -> {
             if (contractService.findById(contract.getId()) == null){
-                return ResponseEntity.ok(contractService.save(contract));
+                return ResponseEntity.status(201).body(contractService.save(contract));
             }
             else {
                 throw new RuntimeException("Duplicate contract exception");
@@ -71,7 +73,7 @@ public class ContractController {
     public CompletableFuture<ResponseEntity<Contract>> updateContract(@PathVariable Long id, @RequestBody Contract contract){
         return  CompletableFuture.supplyAsync(() -> {
             if (contractService.findById(id) != null) {
-                return ResponseEntity.ok(contractService.update(id, contract));
+                return ResponseEntity.status(204).body(contractService.update(id, contract));
             }
             else {
                 throw new RuntimeException(CONTRACTNOTFOUNDMESSAGE);

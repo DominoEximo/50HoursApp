@@ -1,5 +1,6 @@
 package hu.inf.unideb.thesis.dao;
 
+import hu.inf.unideb.thesis.entity.Location;
 import hu.inf.unideb.thesis.entity.Role;
 import hu.inf.unideb.thesis.entity.User;
 import hu.inf.unideb.thesis.repositories.RoleRepository;
@@ -81,10 +82,17 @@ public class UserDAO implements DAO<User>{
             List<Role> bacofficeRoles = new ArrayList<>();
             bacofficeRoles.add(roleRepository.findByName("USER"));
             bacofficeRoles.add(roleRepository.findByName("BACKOFFICE"));
-            save(new User("user","User","User","test@gmail.com","(+36) 232-2222"
+            User testUser = new User("user","User","User","test@gmail.com","(+36) 232-2222"
                     ,new Date(System.currentTimeMillis()),'m',"{noop}password","OMTEST"
                     , "TESTCOORDINATOR","TESTCOORDINATOR@email.test"
-                    ,"testcordphone",userRoles));
+                    ,"testcordphone",userRoles);
+            Location testLocation = new Location();
+            testLocation.setCountry("Hungary");
+            testLocation.setStreet("Nyíregyháza");
+            testLocation.setLat(47.95539);
+            testLocation.setLon(21.71671);
+            testUser.setLocation(testLocation);
+            save(testUser);
             save(new User("admin","Admin","Admin","DominoEximo@gmail.com","(+36) 232-1234"
                     ,new Date(System.currentTimeMillis()),'f',"{noop}password","OMTEST2"
                     ,"TESTCOORDINATOR2","TESTCOORDINATOR2@email.test"

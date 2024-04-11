@@ -1,9 +1,13 @@
-package hu.inf.unideb.thesis.integration.user;
+package hu.inf.unideb.thesis.integration.contract;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hu.inf.unideb.thesis.entity.User;
+import hu.inf.unideb.thesis.entity.Contract;
+import hu.inf.unideb.thesis.entity.Institution;
+import hu.inf.unideb.thesis.service.ContractService;
+import hu.inf.unideb.thesis.service.InstitutionService;
+import hu.inf.unideb.thesis.service.RoleService;
 import hu.inf.unideb.thesis.service.UserService;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +20,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -24,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("integration")
-public class UserControllerIntegrationTest {
+public class ContractControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -33,35 +39,57 @@ public class UserControllerIntegrationTest {
     private ObjectMapper objectMapper;
 
     @Autowired
+    private ContractService contractService;
+
+    @Autowired
+    RoleService roleService;
+
+    @Autowired
     private UserService userService;
 
+    @Autowired
+    private InstitutionService institutionService;
 
     @BeforeEach
     public void setUp(){
+        roleService.setUpMockedData();
         userService.setUpMockedData();
+        institutionService.setUpMockedData();
+        contractService.setUpMockedData();
     }
+
     @Test
-    @WithMockUser(roles = "USER")
-    public void testGetUsers() throws Exception {
+    @WithMockUser("USER")
+    public void testGetContracts() throws Exception{
 
-       MvcResult mvcResult = mockMvc.perform(get("/users").accept(MediaType.APPLICATION_JSON)
-                       .contentType(MediaType.APPLICATION_JSON))
-                       .andExpect(request().asyncStarted())
-                       .andReturn();
+        MvcResult mvcResult = mockMvc.perform(get("/contracts").accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(request().asyncStarted())
+                .andReturn();
 
-        mockMvc.perform(MockMvcRequestBuilders.asyncDispatch(mvcResult))
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.asyncDispatch(mvcResult))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(jsonPath("$.content").exists());
+                .andReturn();
 
+
+        String responseBody = result.getResponse().getContentAsString();
+
+        JsonNode jsonNode = objectMapper.readTree(responseBody);
+
+        int count = jsonNode.size();
+
+        assertTrue(count > 0);
 
     }
 
     @Test
     @WithMockUser("USER")
-    public void testGetUserById() throws Exception{
+    public void testGetContractById() throws Exception{
 
-        MvcResult mvcResult = mockMvc.perform(get("/users/{id}",1L).accept(MediaType.APPLICATION_JSON)
+        Contract temp = contractService.findAll().get(0);
+
+        MvcResult mvcResult = mockMvc.perform(get("/contracts/{id}",temp.getId()).accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(request().asyncStarted())
                 .andReturn();
@@ -69,20 +97,20 @@ public class UserControllerIntegrationTest {
         mockMvc.perform(MockMvcRequestBuilders.asyncDispatch(mvcResult))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(jsonPath("$.username").value("user"));
+                .andExpect(jsonPath("$.student.username").value("user"));
 
     }
-    @Test
-    @WithMockUser(roles = "USER")
-    @Transactional
-    public void testRegisterThenDeleteUser() throws Exception {
-        User user2 = new User();
-        user2.setId(3L);
-        user2.setUsername("testRegisteringUser");
-        user2.setEmail("test@example.com");
 
-        MvcResult mvcResult = mockMvc.perform(post("/users/signup").with(csrf())
-                        .content(objectMapper.writeValueAsString(user2))
+    @Test
+    @WithMockUser("USER")
+    public void testCreateContractThenDeleteContract() throws Exception{
+
+        Contract testContract = new Contract();
+        testContract.setId(2L);
+        testContract.setCompleted(true);
+
+        MvcResult mvcResult = mockMvc.perform(post("/contracts").with(csrf())
+                        .content(objectMapper.writeValueAsString(testContract))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(request().asyncStarted())
@@ -92,7 +120,9 @@ public class UserControllerIntegrationTest {
                 .andExpect(status().isCreated())
                 .andDo(print());
 
-        MvcResult mvcResult2 = mockMvc.perform(delete("/users/{id}", 3L).with(csrf())
+        Contract temp = contractService.findById(2L);
+
+        MvcResult mvcResult2 = mockMvc.perform(delete("/contracts/{id}", temp.getId()).with(csrf())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(request().asyncStarted())
@@ -101,20 +131,19 @@ public class UserControllerIntegrationTest {
         mockMvc.perform(MockMvcRequestBuilders.asyncDispatch(mvcResult2))
                 .andExpect(status().isOk())
                 .andDo(print());
-
     }
 
     @Test
-    @WithMockUser(roles = "USER")
-    @Transactional
-    public void testUpdateUser() throws Exception {
-        User user = new User();
-        user.setId(3L);
-        user.setUsername("testCreateuser2");
-        user.setEmail("test@example.com");
+    @WithMockUser("USER")
+    public void testUpdateContract() throws Exception{
 
-        MvcResult mvcResult = mockMvc.perform(post("/users").with(csrf())
-                        .content(objectMapper.writeValueAsString(user))
+        Contract testContract  = new Contract();
+
+        testContract.setId(3L);
+        testContract.setCompleted(false);
+
+        MvcResult mvcResult = mockMvc.perform(post("/contracts").with(csrf())
+                        .content(objectMapper.writeValueAsString(testContract))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(request().asyncStarted())
@@ -122,13 +151,14 @@ public class UserControllerIntegrationTest {
 
         mockMvc.perform(MockMvcRequestBuilders.asyncDispatch(mvcResult))
                 .andExpect(status().isCreated())
-                .andDo(print())
-                .andExpect(jsonPath("$.username").value("testCreateuser2"));
+                .andDo(print());
 
-        user.setEmail("newTestEmail@gmail.com");
+        Contract temp = contractService.findById(3L);
 
-        MvcResult mvcResult2 = mockMvc.perform(put("/users/{id}", 1L).with(csrf())
-                        .content(objectMapper.writeValueAsString(user))
+        temp.setCompleted(true);
+
+        MvcResult mvcResult2 = mockMvc.perform(put("/contracts/{id}",temp.getId()).with(csrf())
+                        .content(objectMapper.writeValueAsString(testContract))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(request().asyncStarted())
@@ -138,5 +168,4 @@ public class UserControllerIntegrationTest {
                 .andExpect(status().is(204))
                 .andDo(print());
     }
-
 }

@@ -52,4 +52,15 @@ public class JobTypeDAO implements DAO<JobType>{
     public void delete(long id) {
         jobTypeRepository.deleteById(id);
     }
+
+    public void setUpMockedData(){
+        if (getAll().isEmpty()){
+            save(new JobType("test"));
+            save(new JobType("test2"));
+            save(new JobType("test3"));
+            save(new JobType("test4"));
+            save(new JobType("test5"));
+            save(new JobType("test6"));
+        }
+    }
 }
