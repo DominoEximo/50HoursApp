@@ -2,14 +2,22 @@ package hu.inf.unideb.thesis.config.security;
 
 
 import hu.inf.unideb.thesis.config.authentication.CustomLogoutSuccessHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
@@ -17,6 +25,11 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 @EnableWebSecurity
 public class SecurityConfig {
 
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Bean
     public LogoutSuccessHandler logoutSuccessHandler() {
         return new CustomLogoutSuccessHandler();
@@ -27,9 +40,12 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/user/signup").permitAll()
+                        .requestMatchers("/users/signup").permitAll()
+                        .requestMatchers("/users/**").hasAnyAuthority("USER")
+                        .requestMatchers("/jobTypes/**").hasAnyAuthority("BACKOFFICE")
+                        .requestMatchers("/roles/**").hasAnyAuthority("BACKOFFICE")
                         .requestMatchers("/index").hasAnyAuthority("USER")
-                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginProcessingUrl("/perform_login")
@@ -39,11 +55,11 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .logout(form -> form
-                        .logoutUrl("/perform_logout") // Specify the logout URL
-                        .logoutSuccessUrl("/login?logout") // Redirect after successful logout
+                        .logoutUrl("/perform_logout")
+                        .logoutSuccessUrl("/login?logout")
                         .logoutSuccessHandler(logoutSuccessHandler())
-                        .invalidateHttpSession(true) // Invalidate the HTTP session
-                        .deleteCookies("JSESSIONID") // Remove session-related cookies
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
                         .permitAll()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
@@ -56,6 +72,21 @@ public class SecurityConfig {
     }
 
 
+
+    @Bean
+    public AuthenticationManager authManager(HttpSecurity http) throws Exception {
+        return http.getSharedObject(AuthenticationManagerBuilder.class)
+                .authenticationProvider(authProvider())
+                .build();
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder);
+        return authProvider;
+    }
 
 
 

@@ -1,21 +1,29 @@
 package hu.inf.unideb.thesis.service.impl;
 
+import hu.inf.unideb.thesis.dao.RoleDAO;
 import hu.inf.unideb.thesis.dao.UserDAO;
+import hu.inf.unideb.thesis.entity.Location;
+import hu.inf.unideb.thesis.entity.Role;
 import hu.inf.unideb.thesis.entity.User;
 import hu.inf.unideb.thesis.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-
     @Autowired
     UserDAO userDAO;
+
+    @Autowired
+    RoleDAO roleDAO;
 
     @Override
     public User findById(long id) {

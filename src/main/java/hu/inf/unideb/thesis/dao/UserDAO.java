@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -18,7 +19,8 @@ import java.util.List;
 @Component
 public class UserDAO implements DAO<User>{
 
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     UserRepository userRepository;
@@ -83,7 +85,7 @@ public class UserDAO implements DAO<User>{
             bacofficeRoles.add(roleRepository.findByName("USER"));
             bacofficeRoles.add(roleRepository.findByName("BACKOFFICE"));
             User testUser = new User("user","User","User","test@gmail.com","(+36) 232-2222"
-                    ,new Date(System.currentTimeMillis()),'m',"{noop}password","OMTEST"
+                    ,new Date(System.currentTimeMillis()),'m',passwordEncoder.encode("password"),"OMTEST"
                     , "TESTCOORDINATOR","TESTCOORDINATOR@email.test"
                     ,"testcordphone",userRoles);
             Location testLocation = new Location();
@@ -94,7 +96,7 @@ public class UserDAO implements DAO<User>{
             testUser.setLocation(testLocation);
             save(testUser);
             save(new User("admin","Admin","Admin","DominoEximo@gmail.com","(+36) 232-1234"
-                    ,new Date(System.currentTimeMillis()),'f',"{noop}password","OMTEST2"
+                    ,new Date(System.currentTimeMillis()),'f',passwordEncoder.encode("password"),"OMTEST2"
                     ,"TESTCOORDINATOR2","TESTCOORDINATOR2@email.test"
                     ,"testcordphone2",bacofficeRoles));
 

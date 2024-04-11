@@ -42,7 +42,7 @@ public class JobTypeControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser("USER")
+    @WithMockUser(authorities = "BACKOFFICE")
     public void testGetJobtypes() throws Exception{
 
         MvcResult mvcResult = mockMvc.perform(get("/jobTypes").accept(MediaType.APPLICATION_JSON)
@@ -66,7 +66,7 @@ public class JobTypeControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser("USER")
+    @WithMockUser(authorities = "BACKOFFICE")
     public void testGetJobTypeById() throws Exception{
 
         MvcResult mvcResult = mockMvc.perform(get("/jobTypes/{id}",1L).accept(MediaType.APPLICATION_JSON)
@@ -81,7 +81,7 @@ public class JobTypeControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser("USER")
+    @WithMockUser(authorities = "BACKOFFICE")
     public void testCreateJobTypeThenDeleteJobType() throws Exception{
 
         JobType integrationTestType = new JobType();
@@ -113,7 +113,7 @@ public class JobTypeControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser("USER")
+    @WithMockUser(authorities = "BACKOFFICE")
     public void testUpdateJobType() throws Exception{
 
         JobType test = jobTypeService.findByName("test3");

@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.RequestScope;
 
@@ -34,6 +36,9 @@ public class UserController {
     @Autowired
     GeocodingService geocodingService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
 
     @PostMapping(value = "/users/signup",produces = "application/json")
     public CompletableFuture<ResponseEntity<String>> registerUser(@RequestBody User user){
@@ -43,6 +48,8 @@ public class UserController {
                 throw new RuntimeException(USERALREADYEXISTMESSAGE);
             }
             else {
+                String encodedPassword = passwordEncoder.encode(user.getPassword());
+                user.setPassword(encodedPassword);
                 user.setRoles(List.of(roleService.findByName("USER")));
 
                 if (user.getLocation() != null){
@@ -97,6 +104,9 @@ public class UserController {
 
         return CompletableFuture.supplyAsync(() -> {
             if (userService.findByName(user.getUsername()) == null && userService.findById(user.getId()) == null){
+
+                String encodedPassword = passwordEncoder.encode(user.getPassword());
+                user.setPassword(encodedPassword);
 
                 if (user.getLocation() != null){
                     String address = user.getLocation().getStreet();

@@ -43,7 +43,7 @@ public class RoleControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser("USER")
+    @WithMockUser(authorities = "BACKOFFICE")
     public void testGetRoles() throws Exception {
 
         MvcResult mvcResult = mockMvc.perform(get("/roles").accept(MediaType.APPLICATION_JSON)
@@ -67,7 +67,7 @@ public class RoleControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser("USER")
+    @WithMockUser(authorities = "BACKOFFICE")
     public void testGetRoleById()throws Exception{
         MvcResult mvcResult = mockMvc.perform(get("/roles/{id}", 1L).accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -89,7 +89,7 @@ public class RoleControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser("USER")
+    @WithMockUser(authorities = "BACKOFFICE")
     public void testCreateRoleThenDelete() throws Exception {
 
         Role testRole = new Role();
@@ -123,7 +123,7 @@ public class RoleControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser("USER")
+    @WithMockUser(authorities = "BACKOFFICE")
     public void testUpdateRole() throws Exception {
 
         Role testRole = new Role();

@@ -41,7 +41,7 @@ public class UserControllerIntegrationTest {
         userService.setUpMockedData();
     }
     @Test
-    @WithMockUser(roles = "USER")
+    @WithMockUser(authorities = "USER")
     public void testGetUsers() throws Exception {
 
        MvcResult mvcResult = mockMvc.perform(get("/users").accept(MediaType.APPLICATION_JSON)
@@ -58,7 +58,7 @@ public class UserControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser("USER")
+    @WithMockUser(authorities = "USER")
     public void testGetUserById() throws Exception{
 
         MvcResult mvcResult = mockMvc.perform(get("/users/{id}",1L).accept(MediaType.APPLICATION_JSON)
@@ -73,12 +73,13 @@ public class UserControllerIntegrationTest {
 
     }
     @Test
-    @WithMockUser(roles = "USER")
+    @WithMockUser(authorities = "USER")
     @Transactional
     public void testRegisterThenDeleteUser() throws Exception {
         User user2 = new User();
         user2.setId(3L);
         user2.setUsername("testRegisteringUser");
+        user2.setPassword("testpassword123");
         user2.setEmail("test@example.com");
 
         MvcResult mvcResult = mockMvc.perform(post("/users/signup").with(csrf())
@@ -105,12 +106,13 @@ public class UserControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(roles = "USER")
+    @WithMockUser(authorities = "USER")
     @Transactional
     public void testUpdateUser() throws Exception {
         User user = new User();
         user.setId(3L);
         user.setUsername("testCreateuser2");
+        user.setPassword("testasdawq221223");
         user.setEmail("test@example.com");
 
         MvcResult mvcResult = mockMvc.perform(post("/users").with(csrf())
