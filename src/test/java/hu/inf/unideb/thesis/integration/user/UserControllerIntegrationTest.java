@@ -2,18 +2,15 @@ package hu.inf.unideb.thesis.integration.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hu.inf.unideb.thesis.entity.User;
-import hu.inf.unideb.thesis.service.GeocodingService;
-import hu.inf.unideb.thesis.service.RoleService;
 import hu.inf.unideb.thesis.service.UserService;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -25,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Rollback
+@ActiveProfiles("integration")
 public class UserControllerIntegrationTest {
 
     @Autowired
@@ -59,7 +56,7 @@ public class UserControllerIntegrationTest {
     @Test
     @WithMockUser(roles = "USER")
     @Transactional
-    public void testRegisterThanDeleteUser() throws Exception {
+    public void testRegisterThenDeleteUser() throws Exception {
         User user2 = new User();
         user2.setId(3L);
         user2.setUsername("testRegisteringUser");
@@ -106,7 +103,6 @@ public class UserControllerIntegrationTest {
 
         mockMvc.perform(MockMvcRequestBuilders.asyncDispatch(mvcResult))
                 .andExpect(status().isCreated())
-                // Add additional assertions as needed to verify the response
                 .andDo(print())
                 .andExpect(jsonPath("$.username").value("testCreateuser2"));
 

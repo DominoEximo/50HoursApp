@@ -7,12 +7,14 @@ import hu.inf.unideb.thesis.service.InstitutionService;
 import jakarta.transaction.Transactional;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.stream.Collectors;
@@ -21,10 +23,16 @@ import java.util.stream.Collectors;
 @SpringBootTest
 @Transactional
 @Rollback
+@ActiveProfiles("unit")
 public class InstitutionServiceTest {
 
     @Autowired
     InstitutionService institutionService;
+
+    @BeforeEach
+    public void setUp(){
+        institutionService.setUpMockedData();
+    }
 
     @Test
     public void testGetAllInstitutions(){
@@ -33,7 +41,7 @@ public class InstitutionServiceTest {
 
         institutionService.save(testInstitution);
 
-        Assertions.assertEquals(1, institutionService.findAll().size());
+        Assertions.assertEquals(2, institutionService.findAll().size());
     }
 
     @Test
@@ -42,27 +50,29 @@ public class InstitutionServiceTest {
 
         institutionService.save(testInstitution);
 
-        Assertions.assertEquals(1, institutionService.findAll().size());
+        Assertions.assertEquals(2, institutionService.findAll().size());
 
         institutionService.delete(testInstitution);
 
-        Assertions.assertEquals(0, institutionService.findAll().size());
+        Assertions.assertEquals(1, institutionService.findAll().size());
     }
 
     @Test
     public void testUpdateInstitution(){
 
+
+
         Institution testInstitution = new Institution();
 
         institutionService.save(testInstitution);
 
-        Assertions.assertNull(institutionService.findAll().get(0).getDescription());
+        Assertions.assertNull(institutionService.findAll().get(1).getDescription());
 
         testInstitution.setDescription(new Description());
 
         institutionService.update(testInstitution.getId(),testInstitution);
 
-        Assertions.assertNotNull(institutionService.findAll().get(0).getDescription());
+        Assertions.assertNotNull(institutionService.findAll().get(1).getDescription());
     }
 
     @Test
