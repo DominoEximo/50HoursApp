@@ -171,7 +171,7 @@ Authorization: Basic dXNlcjpwYXNzd29yZA==
 Content-Type: application/json
 
 {
-  "id": 32,
+  "id": 3,
   "username": "testuser",
   "firstName" : "User3",
   "lastName" : "User3",
