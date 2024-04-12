@@ -5,10 +5,17 @@ import hu.inf.unideb.thesis.service.GeocodingService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * Service layer for converting an address to coordinates for calculations.
+ */
 @Service
 public class GeocodingServiceImpl implements GeocodingService {
 
-
+    /***
+     * Creates a location from a string address using open maps API.
+     * @param address the address of user or institution.
+     * @return a Location object with coordinates.
+     */
     @Override
     public Location geocodeAddress(String address) {
         String url = "https://nominatim.openstreetmap.org/search?q=" + address + "&format=json";

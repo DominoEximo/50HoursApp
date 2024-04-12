@@ -18,6 +18,10 @@ import org.springframework.web.context.annotation.RequestScope;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * Controller for handling user-related HTTP requests.
+ */
+
 @RestController("/user")
 @CrossOrigin
 @RequestScope
@@ -39,41 +43,11 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-
-    @PostMapping(value = "/users/signup",produces = "application/json")
-    public CompletableFuture<ResponseEntity<String>> registerUser(@RequestBody User user){
-        return CompletableFuture.supplyAsync(() -> {
-
-            if(userService.findByName(user.getUsername()) != null){
-                throw new RuntimeException(USERALREADYEXISTMESSAGE);
-            }
-            else {
-                String encodedPassword = passwordEncoder.encode(user.getPassword());
-                user.setPassword(encodedPassword);
-                user.setRoles(List.of(roleService.findByName("USER")));
-
-                if (user.getLocation() != null){
-                    String address = user.getLocation().getStreet();
-                    Location responseLocation = geocodingService.geocodeAddress(address);
-                    user.getLocation().setLat(responseLocation.getLat());
-                    user.getLocation().setLon(responseLocation.getLon());
-                }
-
-                userService.save(user);
-                return new ResponseEntity<>(HttpStatus.CREATED);
-            }
-        });
-
-    }
-    @GetMapping(value = "/users",produces = "application/json")
-    public CompletableFuture<ResponseEntity<Page<User>>> getUsersByRole(
-            @RequestParam(name = "role", required = false) String role, Pageable pageable) {
-
-        Page<User> users = userService.findByRole(role, pageable);
-        return CompletableFuture.supplyAsync(() -> ResponseEntity.status(200).body(users));
-    }
-
-
+    /**
+     * Retrieve a user by their ID.
+     * @param id The ID of the user.
+     * @return The user object if found, otherwise null.
+     */
     @GetMapping(value = "/users/{id}", produces = "application/json")
     public CompletableFuture<ResponseEntity<User>> getUserById(@PathVariable Long id) {
         return CompletableFuture.supplyAsync(() -> {
@@ -85,20 +59,25 @@ public class UserController {
             }
         });
     }
+    /**
+     * Retrieve a filtered list of users.
+     * @param role the role to filter by.
+     * @param pageable the pageable object containing the length and page number
+     * @return a Page of user objects.
+     */
+    @GetMapping(value = "/users",produces = "application/json")
+    public CompletableFuture<ResponseEntity<Page<User>>> getUsersByRole(
+            @RequestParam(name = "role", required = false) String role, Pageable pageable) {
 
-    @DeleteMapping(value = "/users/{id}")
-    public CompletableFuture<ResponseEntity<Void>> deleteUserById(@PathVariable Long id) {
-        return CompletableFuture.supplyAsync(() -> {
-            User user = userService.findById(id);
-            if (user != null) {
-                userService.delete(user);
-                return ResponseEntity.ok(null);
-            } else {
-                throw new RuntimeException(USERNOTFOUNDMESSAGE);
-            }
-        });
+        Page<User> users = userService.findByRole(role, pageable);
+        return CompletableFuture.supplyAsync(() -> ResponseEntity.status(200).body(users));
     }
 
+    /**
+     * Create a user.
+     * @param user The user object to be created.
+     * @return The user that was created along with HTTP status.
+     */
     @PostMapping(value = "/users", consumes = "application/json")
     public CompletableFuture<ResponseEntity<User>> saveUser(@RequestBody User user){
 
@@ -126,6 +105,12 @@ public class UserController {
 
     }
 
+    /**
+     * Update a user.
+     * @param id The ID of the user.
+     * @param user The user object to be updated.
+     * @return The user that was updated along with HTTP status.
+     */
     @PutMapping(value = "/users/{id}", consumes = "application/json")
     public CompletableFuture<ResponseEntity<User>> updateUser(@PathVariable Long id, @RequestBody User user){
 
@@ -137,5 +122,53 @@ public class UserController {
         }
 
         return CompletableFuture.supplyAsync(() -> ResponseEntity.status(204).body( userService.update(id,user)));
+    }
+
+    /**
+     * Delete a user based on the given ID.
+     * @param id The ID of the object to be deleted.
+     */
+    @DeleteMapping(value = "/users/{id}")
+    public CompletableFuture<ResponseEntity<Void>> deleteUserById(@PathVariable Long id) {
+        return CompletableFuture.supplyAsync(() -> {
+            User user = userService.findById(id);
+            if (user != null) {
+                userService.delete(user);
+                return ResponseEntity.ok(null);
+            } else {
+                throw new RuntimeException(USERNOTFOUNDMESSAGE);
+            }
+        });
+    }
+
+    /***
+     * Register a user.
+     * @param user the user object to be created.
+     * @return The user object that was created along with HTTP status.
+     */
+    @PostMapping(value = "/users/signup",produces = "application/json")
+    public CompletableFuture<ResponseEntity<String>> registerUser(@RequestBody User user){
+        return CompletableFuture.supplyAsync(() -> {
+
+            if(userService.findByName(user.getUsername()) != null){
+                throw new RuntimeException(USERALREADYEXISTMESSAGE);
+            }
+            else {
+                String encodedPassword = passwordEncoder.encode(user.getPassword());
+                user.setPassword(encodedPassword);
+                user.setRoles(List.of(roleService.findByName("USER")));
+
+                if (user.getLocation() != null){
+                    String address = user.getLocation().getStreet();
+                    Location responseLocation = geocodingService.geocodeAddress(address);
+                    user.getLocation().setLat(responseLocation.getLat());
+                    user.getLocation().setLon(responseLocation.getLon());
+                }
+
+                userService.save(user);
+                return new ResponseEntity<>(HttpStatus.CREATED);
+            }
+        });
+
     }
 }

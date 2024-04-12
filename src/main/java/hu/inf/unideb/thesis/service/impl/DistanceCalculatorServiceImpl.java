@@ -10,12 +10,23 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Service layer for calculating distance and filtering institutions.
+ */
 @Service
 public class DistanceCalculatorServiceImpl implements DistanceCalculatorService {
 
     @Autowired
     InstitutionDAO institutionDAO;
 
+    /***
+     * Calculates the distance between 2 coordinates.
+     * @param lat1 Latitude of first location.
+     * @param lon1 Longitude of first location.
+     * @param lat2 Latitude of second location.
+     * @param lon2 Longitude of second location.
+     * @return the distance between the 2 locations.
+     */
     @Override
     public double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
 
@@ -40,6 +51,12 @@ public class DistanceCalculatorServiceImpl implements DistanceCalculatorService 
         return distance;
     }
 
+    /***
+     * Retrieves a filtered list of institutions based on a given distance from a user's location.
+     * @param userLocation The location of a user.
+     * @param maxDistance The distance for calculating.
+     * @return a filtered list of institutions.
+     */
     @Override
     public List<Institution> getInstitutionsByDistance(Location userLocation, double maxDistance) {
 

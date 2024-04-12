@@ -54,7 +54,7 @@ public class InstitutionControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(roles = "USER")
+    @WithMockUser(authorities = "USER")
     public void testGetInstitutions() throws Exception {
 
 
@@ -70,7 +70,7 @@ public class InstitutionControllerIntegrationTest {
 
     }
     @Test
-    @WithMockUser(roles = "USER")
+    @WithMockUser(authorities = "USER")
     public void testCreateInstitutionsThenDelete() throws Exception{
 
         Institution institution = new Institution();
@@ -104,7 +104,7 @@ public class InstitutionControllerIntegrationTest {
                 .andDo(print());
     }
     @Test
-    @WithMockUser(roles = "USER")
+    @WithMockUser(authorities = "USER")
     public void testGetInstitutionById() throws Exception{
 
         Institution temp = institutionService.findByName("TestInstitution");
@@ -122,7 +122,7 @@ public class InstitutionControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(roles = "USER")
+    @WithMockUser(authorities = "USER")
     public void testUpdateInstitution() throws Exception{
 
         Institution temp = institutionService.findByName("TestInstitution");
@@ -145,7 +145,7 @@ public class InstitutionControllerIntegrationTest {
 
     }
     @Test
-    @WithMockUser(roles = "USER")
+    @WithMockUser(authorities = "USER")
     public void testGetNearbyInstitutions()throws Exception{
 
         Institution institution = new Institution();

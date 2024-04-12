@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 
 import java.sql.Date;
 
+/**
+ * Represents a contract in the system.
+ */
 @Entity
 public class Contract {
 

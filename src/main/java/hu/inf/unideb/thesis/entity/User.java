@@ -1,6 +1,6 @@
 package hu.inf.unideb.thesis.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 
 
@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Represents a user in the system.
+ */
 @Entity
 public class User {
 

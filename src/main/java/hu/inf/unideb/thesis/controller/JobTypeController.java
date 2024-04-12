@@ -11,6 +11,9 @@ import org.springframework.web.context.annotation.RequestScope;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * Controller for handling jobType-related HTTP requests.
+ */
 @RestController("/jobTypes")
 @CrossOrigin
 @RequestScope
@@ -24,11 +27,11 @@ public class JobTypeController {
     @Autowired
     JobTypeService jobTypeService;
 
-    @GetMapping(value = "/jobTypes",produces = "application/json")
-    public CompletableFuture<ResponseEntity<List<JobType>>> getJobTypes(){
-        return CompletableFuture.supplyAsync(() -> ResponseEntity.ok(jobTypeService.findAll()));
-    }
-
+    /**
+     * Retrieve a jobType by their ID.
+     * @param id The ID of the jobType.
+     * @return The jobType object if found, otherwise null.
+     */
     @GetMapping(value = "/jobTypes/{id}", produces = "application/json")
     public CompletableFuture<ResponseEntity<JobType>> getJobTypeById(@PathVariable Long id){
 
@@ -43,19 +46,20 @@ public class JobTypeController {
 
     }
 
-    @DeleteMapping(value = "/jobTypes/{id}")
-    public CompletableFuture<ResponseEntity<Void>> deleteJobTypeById(@PathVariable Long id){
-        return CompletableFuture.supplyAsync(() -> {
-            JobType jobType = jobTypeService.findById(id);
-            if (jobType != null) {
-                jobTypeService.delete(jobType);
-                return ResponseEntity.ok(null);
-            } else {
-                throw new RuntimeException(JOBTPYENOTFOUNDMESSAGE);
-            }
-        });
+    /**
+     * Retrieve all jobTypes.
+     * @return a List of jobType objects.
+     */
+    @GetMapping(value = "/jobTypes",produces = "application/json")
+    public CompletableFuture<ResponseEntity<List<JobType>>> getJobTypes(){
+        return CompletableFuture.supplyAsync(() -> ResponseEntity.ok(jobTypeService.findAll()));
     }
 
+    /**
+     * Create a job type.
+     * @param jobType The jobType object to be created.
+     * @return The jobType that was created along with HTTP status.
+     */
     @PostMapping(value = "/jobTypes",consumes = "application/json")
     public CompletableFuture<ResponseEntity<JobType>> saveJobTypeById(@RequestBody JobType jobType){
 
@@ -69,6 +73,12 @@ public class JobTypeController {
         });
     }
 
+    /**
+     * Update a jobType.
+     * @param id The ID of the job type.
+     * @param jobType The jobType object to be updated.
+     * @return The jobType that was updated.
+     */
     @PutMapping(value = "/jobTypes/{id}", consumes = "application/json")
     public CompletableFuture<ResponseEntity<JobType>> updateJobType(@PathVariable Long id, @RequestBody JobType jobType){
 
@@ -77,6 +87,26 @@ public class JobTypeController {
 
     }
 
+    /**
+     * Delete a jobType based on the given ID.
+     * @param id The ID of the object to be deleted.
+     */
+    @DeleteMapping(value = "/jobTypes/{id}")
+    public CompletableFuture<ResponseEntity<Void>> deleteJobTypeById(@PathVariable Long id){
+        return CompletableFuture.supplyAsync(() -> {
+            JobType jobType = jobTypeService.findById(id);
+            if (jobType != null) {
+                jobTypeService.delete(jobType);
+                return ResponseEntity.ok(null);
+            } else {
+                throw new RuntimeException(JOBTPYENOTFOUNDMESSAGE);
+            }
+        });
+    }
+
+    /**
+     * Sets up predefined data for the project.
+     */
     @RequestMapping(value = "/jobTypes/setUpMockedData",produces = "application/json")
     public void setUpMockedJobTypes(){
 

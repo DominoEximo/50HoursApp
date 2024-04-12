@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+/***
+ * Custom implementation of handling logout.
+ */
 @Component
 public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
 

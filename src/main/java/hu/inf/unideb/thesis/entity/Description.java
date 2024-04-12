@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a description used in institutions in the system.
+ */
 @Entity
 public class Description {
 

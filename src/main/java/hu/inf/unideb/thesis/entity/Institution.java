@@ -2,6 +2,9 @@ package hu.inf.unideb.thesis.entity;
 
 import jakarta.persistence.*;
 
+/**
+ * Represents an institution in the system.
+ */
 @Entity
 public class Institution {
 

@@ -21,6 +21,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
+/***
+ * Security configuration of the project.
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -45,6 +48,9 @@ public class SecurityConfig {
                         .requestMatchers("/jobTypes/**").hasAnyAuthority("BACKOFFICE")
                         .requestMatchers("/roles/**").hasAnyAuthority("BACKOFFICE")
                         .requestMatchers("/index").hasAnyAuthority("USER")
+                        .requestMatchers("/institutions/**").hasAnyAuthority("USER")
+                        .requestMatchers("/contracts/**").hasAnyAuthority("USER")
+
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

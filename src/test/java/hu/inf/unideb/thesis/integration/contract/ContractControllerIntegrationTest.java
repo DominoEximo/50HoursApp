@@ -59,7 +59,7 @@ public class ContractControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser("USER")
+    @WithMockUser(authorities = "USER")
     public void testGetContracts() throws Exception{
 
         MvcResult mvcResult = mockMvc.perform(get("/contracts").accept(MediaType.APPLICATION_JSON)
@@ -84,7 +84,7 @@ public class ContractControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser("USER")
+    @WithMockUser(authorities = "USER")
     public void testGetContractById() throws Exception{
 
         Contract temp = contractService.findAll().get(0);
@@ -102,7 +102,7 @@ public class ContractControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser("USER")
+    @WithMockUser(authorities = "USER")
     public void testCreateContractThenDeleteContract() throws Exception{
 
         Contract testContract = new Contract();
@@ -134,7 +134,7 @@ public class ContractControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser("USER")
+    @WithMockUser(authorities = "USER")
     public void testUpdateContract() throws Exception{
 
         Contract testContract  = new Contract();
