@@ -165,7 +165,7 @@ Content-Type: application/json
 
 **Update an existing user(PUT /users/{id})**
 ```console
-POST /users HTTP/1.1
+PUT /users HTTP/1.1
 Host: localhost:8080
 Authorization: Basic dXNlcjpwYXNzd29yZA==
 Content-Type: application/json
@@ -263,7 +263,7 @@ Content-Type: application/json
 
 **Update an existing institution(PUT /institutions/{id})**
 ```console
-POST /institutions HTTP/1.1
+PUT /institutions HTTP/1.1
 Host: localhost:8080
 Authorization: Basic dXNlcjpwYXNzd29yZA==
 Content-Type: application/json
@@ -372,7 +372,7 @@ Content-Type: application/json
 
 **Update an existing contract(PUT /contracts/{id})**
 ```console
-POST /contracts HTTP/1.1
+PUT /contracts HTTP/1.1
 Host: localhost:8080
 Authorization: Basic dXNlcjpwYXNzd29yZA==
 Content-Type: application/json
@@ -463,7 +463,7 @@ Content-Type: application/json
 
 **Update an existing role(PUT /roles/{id})**
 ```console
-POST /roles HTTP/1.1
+PUT /roles HTTP/1.1
 Host: localhost:8080
 Authorization: Basic YWRtaW46cGFzc3dvcmQ=
 Content-Type: application/json
@@ -514,7 +514,7 @@ Content-Type: application/json
 
 **Update an existing jobType(PUT /jobTypes/{id})**
 ```console
-POST /jobTypes HTTP/1.1
+PUT /jobTypes HTTP/1.1
 Host: localhost:8080
 Authorization: Basic YWRtaW46cGFzc3dvcmQ=
 Content-Type: application/json
