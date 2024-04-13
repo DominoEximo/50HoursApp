@@ -22,17 +22,20 @@ public class Contract {
 
     private Date startDate;
 
+    private Integer hours;
+
     private Date endDate;
     private Boolean completed;
 
     public Contract() {
     }
 
-    public Contract(Long id, User student, Institution institution, Date startDate, Date endDate, Boolean completed) {
+    public Contract(Long id, User student, Institution institution, Date startDate,Integer hours, Date endDate, Boolean completed) {
         this.id = id;
         this.student = student;
         this.institution = institution;
         this.startDate = startDate;
+        this.hours = hours;
         this.endDate = endDate;
         this.completed = completed;
     }
@@ -67,6 +70,14 @@ public class Contract {
 
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
+    }
+
+    public Integer getHours() {
+        return hours;
+    }
+
+    public void setHours(Integer hours) {
+        this.hours = hours;
     }
 
     public Date getEndDate() {

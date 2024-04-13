@@ -368,6 +368,7 @@ Content-Type: application/json
     },
     "institution": null,
     "startDate": "2024-04-05",
+    "hours" : 0,
     "endDate": "2024-10-05",
     "completed": false
   }
@@ -415,6 +416,7 @@ Content-Type: application/json
     },
     "institution": null,
     "startDate": "2024-04-05",
+    "hours" : 12,
     "endDate": "2024-10-05",
     "completed": true
   }

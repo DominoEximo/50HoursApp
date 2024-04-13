@@ -63,7 +63,10 @@ public class User {
         this.preferedJobs = new ArrayList<>();
     }
 
-    public User( String username,String firstName,String lastName, String email, String phoneNumber, Date birthDate, Character gender, String password, String OMID,String schoolName, String IKSZCoordinator, String coordinatorEmail, String coordinatorPhone, List<Role> roles) {
+    public User( String username,String firstName,String lastName, String email,
+                 String phoneNumber, Date birthDate, Character gender, String password,
+                 String OMID,String schoolName, String IKSZCoordinator, String coordinatorEmail,
+                 String coordinatorPhone, List<Role> roles) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
