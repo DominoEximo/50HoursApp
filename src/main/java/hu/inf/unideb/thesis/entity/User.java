@@ -35,6 +35,8 @@ public class User {
 
     private String OMID;
 
+    private String schoolName;
+
     private String IKSZCoordinator;
 
     private String coordinatorEmail;
@@ -61,7 +63,7 @@ public class User {
         this.preferedJobs = new ArrayList<>();
     }
 
-    public User( String username,String firstName,String lastName, String email, String phoneNumber, Date birthDate, Character gender, String password, String OMID, String IKSZCoordinator, String coordinatorEmail, String coordinatorPhone, List<Role> roles) {
+    public User( String username,String firstName,String lastName, String email, String phoneNumber, Date birthDate, Character gender, String password, String OMID,String schoolName, String IKSZCoordinator, String coordinatorEmail, String coordinatorPhone, List<Role> roles) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -71,6 +73,7 @@ public class User {
         this.gender = gender;
         this.password = password;
         this.OMID = OMID;
+        this.schoolName = schoolName;
         this.IKSZCoordinator = IKSZCoordinator;
         this.coordinatorEmail = coordinatorEmail;
         this.coordinatorPhone = coordinatorPhone;
@@ -164,6 +167,14 @@ public class User {
 
     public void setOMID(String OMID) {
         this.OMID = OMID;
+    }
+
+    public String getSchoolName() {
+        return schoolName;
+    }
+
+    public void setSchoolName(String schoolName) {
+        this.schoolName = schoolName;
     }
 
     public String getIKSZCoordinator() {

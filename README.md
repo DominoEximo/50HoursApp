@@ -151,6 +151,7 @@ Content-Type: application/json
     }
   ],
   "omid": "OMTEST2",
+  "schoolName" : "testSchool",
   "ikszcoordinator": "TESTCOORDINATOR2",
   "location" : {
 
@@ -193,6 +194,7 @@ Content-Type: application/json
     }
   ],
   "omid": "OMTEST2",
+  "schoolName" : "testSchool",
   "ikszcoordinator": "TESTCOORDINATOR2",
   "location" : {
 
@@ -360,6 +362,7 @@ Content-Type: application/json
         "lat": 47.95539,
         "lon": 21.71671
       },
+      "schoolName" : "testSchool",
       "omid": "OMTEST",
       "ikszcoordinator": "TESTCOORDINATOR"
     },
@@ -407,6 +410,7 @@ Content-Type: application/json
         "lon": 21.71671
       },
       "omid": "OMTEST",
+      "schoolName" : "testSchool",
       "ikszcoordinator": "TESTCOORDINATOR"
     },
     "institution": null,
