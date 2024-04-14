@@ -5,7 +5,6 @@ import hu.inf.unideb.thesis.service.ContractService;
 import hu.inf.unideb.thesis.service.InstitutionService;
 import hu.inf.unideb.thesis.service.UserService;
 import jakarta.transaction.Transactional;
-import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -35,12 +34,6 @@ public class ContractServiceTest {
     @Autowired
     UserService userService;
 
-    @AfterEach
-    public void flushContracts(){
-        for (Contract contract : contractService.findAll()){
-            contractService.delete(contract);
-        }
-    }
 
     @Test
     public void testGetContracts(){
