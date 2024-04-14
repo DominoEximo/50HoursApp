@@ -53,6 +53,9 @@ mvn test
 
 **Components**:  
 - **REST API Endpoints**: Expose endpoints for managing users, including:  
+  - **LOGIN**
+    - **'POST /perform_login'**: Delegates the login data to Spring Security
+    - **'GET /perform_logout'**: Delegates the logout request to Spring Security
   - **USERS**
     - **'GET /users'**: Retrieve all users.  
     - **'GET /users/{id}**': Retrieve a user by ID.  
@@ -103,6 +106,20 @@ mvn test
 
 ## Usage
 
+**Login**
+
+```console
+POST /perform_login HTTP/1.1
+Host: localhost:8080
+username=user&password=password
+```
+
+**Logout**
+
+```console
+GET /perform_logout HTTP/1.1
+Host: localhost:8080
+```
 **Users**
 
 **Retrieve all users(GET /users)**
