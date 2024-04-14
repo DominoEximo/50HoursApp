@@ -68,8 +68,6 @@ public class ContractServiceTest {
 
         newContract.setCompleted(true);
 
-        System.out.println(contractService.findAll().stream().map(Contract::getId).collect(Collectors.toList()));
-
         contractService.update(newContract.getId(),newContract);
 
         Assertions.assertTrue(contractService.findById(newContract.getId()).getCompleted());
