@@ -72,9 +72,6 @@ public class SecurityConfig {
                         .maxSessionsPreventsLogin(false)
                         .expiredUrl("/login?expired")
                 )
-                .sessionManagement((session) -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
-                )
                 .httpBasic(Customizer.withDefaults())
                 .build();
     }

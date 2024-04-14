@@ -64,7 +64,8 @@ public class DistanceCalculatorServiceImpl implements DistanceCalculatorService 
         List<Institution> nearbyInstitutions = new ArrayList<>();
 
         for (Institution institution : institutions){
-            double distance = calculateDistance(userLocation.getLat(), userLocation.getLon(), institution.getLocation().getLat(), institution.getLocation().getLon());
+            double distance = calculateDistance(userLocation.getLat(), userLocation.getLon(), institution.getLocation().getLat(),
+                    institution.getLocation().getLon());
             if (distance <= maxDistance){
                 nearbyInstitutions.add(institution);
             }
