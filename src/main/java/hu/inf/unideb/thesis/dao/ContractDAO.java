@@ -2,9 +2,13 @@ package hu.inf.unideb.thesis.dao;
 
 import hu.inf.unideb.thesis.entity.Contract;
 import hu.inf.unideb.thesis.repositories.ContractRepository;
+import hu.inf.unideb.thesis.repositories.InstitutionRepository;
+import hu.inf.unideb.thesis.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -15,6 +19,12 @@ public class ContractDAO implements DAO<Contract>{
 
     @Autowired
     ContractRepository contractRepository;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    InstitutionRepository institutionRepository;
 
     /**
      * Retrieve a contract by their unique identifier.
@@ -67,5 +77,23 @@ public class ContractDAO implements DAO<Contract>{
     @Override
     public void delete(long id) {
         contractRepository.deleteById(id);
+    }
+
+    public void setUpMockedData() {
+        if (getAll().isEmpty()){
+            Contract test = new Contract();
+            test.setCompleted(false);
+            LocalDate startDate = LocalDate.of(2024, 4, 5);
+            test.setStartDate(Date.valueOf(startDate));
+            LocalDate endDate = LocalDate.of(2024, 10, 5);
+            test.setEndDate(Date.valueOf(endDate));
+            if (userRepository.findByUsername("user") != null){
+                test.setStudent(userRepository.findByUsername("user"));
+            }
+            if (institutionRepository.findByName("TestInstitution") != null){
+                test.setInstitution(institutionRepository.findByName("TestInstitution"));
+            }
+            save(test);
+        }
     }
 }

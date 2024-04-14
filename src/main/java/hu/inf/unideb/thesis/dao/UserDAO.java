@@ -137,7 +137,8 @@ public class UserDAO implements DAO<User>{
             testUser.setLocation(testLocation);
             save(testUser);
             save(new User("admin","Admin","Admin","DominoEximo@gmail.com","(+36) 232-1234"
-                    ,new Date(System.currentTimeMillis()),'f',passwordEncoder.encode("password"),"OMTEST2","test School name 2"
+                    ,new Date(System.currentTimeMillis()),'f',passwordEncoder.encode("password")
+                    , "OMTEST2","test School name 2"
                     ,"TESTCOORDINATOR2","TESTCOORDINATOR2@email.test"
                     ,"testcordphone2",bacofficeRoles));
 

@@ -88,20 +88,6 @@ public class ContractServiceImpl implements ContractService {
      */
     @Override
     public void setUpMockedData() {
-        if (findAll().isEmpty()){
-            Contract test = new Contract();
-            test.setCompleted(false);
-            LocalDate startDate = LocalDate.of(2024, 4, 5);
-            test.setStartDate(Date.valueOf(startDate));
-            LocalDate endDate = LocalDate.of(2024, 10, 5);
-            test.setEndDate(Date.valueOf(endDate));
-            if (userDAO.findByUsername("user") != null){
-                test.setStudent(userDAO.findByUsername("user"));
-            }
-            if (institutionDAO.findByName("TestInstitution") != null){
-                test.setInstitution(institutionDAO.findByName("TestInstitution"));
-            }
-            save(test);
-        }
+        contractDAO.setUpMockedData();
     }
 }
