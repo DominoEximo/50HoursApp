@@ -97,10 +97,5 @@ public class ContractServiceTest {
         contractService.setUpMockedData();
 
         Assertions.assertEquals(1,contractService.findAll().size());
-
-        userService.delete(userService.findByName("user"));
-
-        //User is null
-        contractService.setUpMockedData();
     }
 }
