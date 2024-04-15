@@ -23,7 +23,7 @@ import java.util.concurrent.CompletableFuture;
  * Controller for handling institution-related HTTP requests.
  */
 @RestController("/institution")
-@CrossOrigin
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestScope
 public class InstitutionController {
 
