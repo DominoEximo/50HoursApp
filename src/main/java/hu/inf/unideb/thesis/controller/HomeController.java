@@ -10,7 +10,7 @@ public class HomeController {
     @RequestMapping("/index")
     @ResponseBody
     public String index() {
-        return "That's pretty basic!";
+        return "Success";
     }
 
 }
