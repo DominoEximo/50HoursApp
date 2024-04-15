@@ -22,7 +22,7 @@ import java.util.concurrent.CompletableFuture;
  */
 
 @RestController("/user")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin
 @RequestScope
 public class UserController {
 
