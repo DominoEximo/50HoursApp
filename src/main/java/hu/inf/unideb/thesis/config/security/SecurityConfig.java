@@ -17,7 +17,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 
 
 /***
@@ -49,7 +48,6 @@ public class SecurityConfig {
                         .requestMatchers("/index").hasAnyAuthority("USER")
                         .requestMatchers("/institutions/**").hasAnyAuthority("USER")
                         .requestMatchers("/contracts/**").hasAnyAuthority("USER")
-
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
